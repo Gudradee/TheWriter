@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/assets/logo.png" alt="the Writer" width="420"></p>
+<p align="center"><img src="docs/assets/logo-azul.png" alt="the Writer" width="420"></p>
 
 <p align="center">Skill para o Claude que escreve em português do Brasil a partir de um <b>perfil de escrita</b> montado por você.<br>Autor + veículo + tom + jogadas de referência, com módulos por área e revisão anti-IA.</p>
 
