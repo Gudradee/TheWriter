@@ -1,0 +1,262 @@
+{
+  "versao": "1.0.0",
+  "autores": {
+    "titulo": "Autores",
+    "camada": "Estilo: a linguagem, a frase, o jeito de pensar no papel",
+    "grupos": [
+      {
+        "id": "fantasia",
+        "nome": "Fantasia",
+        "itens": [
+          {"id": "tolkien", "nome": "J.R.R. Tolkien", "resumo": "Descrição solene, senso de mito e de passado profundo, nomes com peso.", "tecnicas": ["Dá ao assunto uma história anterior: tudo parece ter raízes antigas", "Descreve lugar e objeto com vagar e reverência", "Usa vocabulário levemente arcaico em pontos-chave, nunca no texto todo"], "evitar": "Lentidão em formatos curtos; use em aberturas e fechos."},
+          {"id": "shakespeare", "nome": "William Shakespeare", "resumo": "Imagem poética, metáfora ousada, ritmo de fala, frase que vira citação.", "tecnicas": ["Metáfora concreta e inesperada para uma ideia abstrata", "Antítese e jogo de palavras em frases memoráveis", "Ritmo que soa bem lido em voz alta"], "evitar": "Pastiche de português arcaico; a técnica é a imagem, não o 'vós'."},
+          {"id": "le-guin", "nome": "Ursula K. Le Guin", "resumo": "Prosa limpa e sábia, ideias filosóficas ditas com simplicidade.", "tecnicas": ["Frase simples carregando ideia grande", "Questiona o pressuposto do leitor com calma", "Equilíbrio: nunca grita, nunca enfeita"], "evitar": "Tom de sermão."},
+          {"id": "grrm", "nome": "George R.R. Martin", "resumo": "Tensão, consequência real, ponto de vista de um personagem só.", "tecnicas": ["Conta pelo olhar de uma pessoa, com o que ela sabe e teme", "Toda escolha tem custo visível", "Termina a seção num gancho"], "evitar": "Crueldade gratuita em textos de marca."},
+          {"id": "gaiman", "nome": "Neil Gaiman", "resumo": "Tom de conto de fadas sombrio, intimidade com o leitor, estranho e familiar.", "tecnicas": ["Fala direto com o leitor, como quem conta segredo", "Mistura o cotidiano com um detalhe estranho", "Frases curtas de efeito depois de uma longa"], "evitar": "Exagerar no sombrio em temas sensíveis."},
+          {"id": "pratchett", "nome": "Terry Pratchett", "resumo": "Ironia afiada, nota de rodapé engraçada, sátira com coração.", "tecnicas": ["Aparte irônico (entre parênteses ou em nota) que comenta o próprio texto", "Leva uma lógica absurda até o fim com seriedade", "Por baixo da piada, uma crítica humana"], "evitar": "Ironia contra o próprio leitor."},
+          {"id": "sanderson", "nome": "Brandon Sanderson", "resumo": "Clareza absoluta, regras explícitas, viradas bem preparadas.", "tecnicas": ["Explica as regras do sistema antes de usá-las", "Planta uma informação cedo e paga no final", "Prosa transparente: a palavra não aparece mais que a ideia"], "evitar": "Excesso de explicação em textos curtos."},
+          {"id": "cs-lewis", "nome": "C.S. Lewis", "resumo": "Alegoria, moral sem sermão, conversa direta com o leitor.", "tecnicas": ["Explica uma ideia abstrata por uma história ou comparação doméstica", "Antecipa a objeção do leitor e responde", "Tom de conversa entre adultos inteligentes"], "evitar": "Moral explícita no final."},
+          {"id": "borges", "nome": "Jorge Luis Borges", "resumo": "Ideia vertiginosa em poucas linhas, erudição brincalhona.", "tecnicas": ["Uma premissa impossível tratada com precisão de enciclopédia", "Referências e citações (reais) como jogo", "Concisão extrema"], "evitar": "Referências inventadas apresentadas como reais."},
+          {"id": "rubiao", "nome": "Murilo Rubião", "resumo": "O fantástico tratado como banal, absurdo contado com calma.", "tecnicas": ["Narra o absurdo sem espanto, como fato comum", "Burocracia e cotidiano brasileiro como cenário", "Final que não explica"], "evitar": "Usar em texto que precisa de clareza prática."}
+        ]
+      },
+      {
+        "id": "academicos",
+        "nome": "Filósofos e especialistas",
+        "itens": [
+          {"id": "platao", "nome": "Platão", "resumo": "Diálogo, pergunta que desmonta a certeza do leitor.", "tecnicas": ["Estrutura em perguntas e respostas", "Parte de uma definição comum e mostra que ela falha", "Chega à ideia por etapas"], "evitar": "Diálogo artificial com personagem-escada."},
+          {"id": "montaigne", "nome": "Montaigne", "resumo": "Ensaio pessoal, pensar em voz alta, dúvida honesta.", "tecnicas": ["Primeira pessoa que examina a si mesma", "Digressão que volta ao ponto", "Admite não saber"], "evitar": "Autocentrismo sem ideia."},
+          {"id": "nietzsche", "nome": "Friedrich Nietzsche", "resumo": "Aforismo, frase-martelo, provocação.", "tecnicas": ["Frase curta que inverte um valor estabelecido", "Parágrafos curtos e independentes", "Tom de quem desafia"], "evitar": "Arrogância em texto de serviço."},
+          {"id": "byung-chul-han", "nome": "Byung-Chul Han", "resumo": "Frases curtas e densas, diagnóstico de época.", "tecnicas": ["Nomeia um fenômeno do presente com um conceito", "Frases curtas, afirmativas", "Contrasta 'antes' e 'agora'"], "evitar": "Diagnóstico sem nenhum exemplo."},
+          {"id": "sagan", "nome": "Carl Sagan", "resumo": "Ciência com encantamento, escala cósmica, poesia nos dados.", "tecnicas": ["Muda a escala: do grão de areia ao universo", "Dado preciso com imagem emocionante", "Humildade diante do desconhecido"], "evitar": "Grandiloquência sem dado."},
+          {"id": "feynman", "nome": "Richard Feynman", "resumo": "Explica o difícil com exemplo do dia a dia, sem pose.", "tecnicas": ["Objeto comum como modelo do conceito", "Diz o que ainda não se sabe", "Humor e curiosidade de quem está descobrindo junto"], "evitar": "Simplificar a ponto de ficar errado."},
+          {"id": "kahneman", "nome": "Daniel Kahneman", "resumo": "Experimento, viés, 'você provavelmente pensou X'.", "tecnicas": ["Faz o leitor cair no viés antes de explicá-lo", "Cita o experimento com desenho e resultado", "Nomeia o atalho mental"], "evitar": "Citar estudo que não existe ou não replicou."},
+          {"id": "taleb", "nome": "Nassim Taleb", "resumo": "Argumento combativo, opinião forte, ataque ao senso comum.", "tecnicas": ["Elege um alvo (ideia, não pessoa) e o desmonta", "Aforismo afiado no meio do argumento", "Exemplo de risco e assimetria"], "evitar": "Ataque pessoal."},
+          {"id": "harari", "nome": "Yuval Noah Harari", "resumo": "Síntese grande, da história ao hoje em três parágrafos.", "tecnicas": ["Liga um fato antigo a uma questão atual", "Generaliza com uma frase de efeito e depois sustenta", "Perguntas sobre o futuro"], "evitar": "Generalização sem base."},
+          {"id": "cortella", "nome": "Mario Sergio Cortella", "resumo": "Filosofia de conversa, exemplo brasileiro, frase de efeito acessível.", "tecnicas": ["Etimologia da palavra para abrir a ideia", "Exemplo do cotidiano brasileiro", "Frase curta que resume e pode ser repetida"], "evitar": "Tom de palestra motivacional."}
+        ]
+      },
+      {
+        "id": "comunicacao",
+        "nome": "Comunicação",
+        "itens": [
+          {"id": "ogilvy", "nome": "David Ogilvy", "resumo": "Título com promessa clara, fato no lugar de adjetivo.", "tecnicas": ["Título que informa o benefício", "Fato específico e verificável no lugar do elogio", "Texto longo, desde que cada parágrafo sirva"], "evitar": "Criatividade que esconde o produto."},
+          {"id": "schwartz", "nome": "Eugene Schwartz", "resumo": "Nível de consciência do público, desejo antes do produto.", "tecnicas": ["Define se o leitor conhece o problema, a solução ou o produto", "Canaliza um desejo que já existe", "Título calibrado para o nível de consciência"], "evitar": "Pular etapas de consciência."},
+          {"id": "halbert", "nome": "Gary Halbert", "resumo": "Carta de venda pessoal, urgência, conversa de um para um.", "tecnicas": ["Escreve para uma pessoa, não para 'vocês'", "História pessoal como prova", "Urgência baseada em motivo real"], "evitar": "Urgência falsa."},
+          {"id": "sugarman", "nome": "Joe Sugarman", "resumo": "'Escorregador': cada frase puxa a próxima.", "tecnicas": ["Primeira frase curtíssima", "Termina parágrafos com curiosidade", "Responde objeções na ordem em que surgem"], "evitar": "Ganchos vazios ('mas não é só isso')."},
+          {"id": "godin", "nome": "Seth Godin", "resumo": "Texto curto, uma ideia por post, insight sem enrolação.", "tecnicas": ["Uma única ideia, dita em poucas linhas", "Pergunta ou frase final que fica", "Sem introdução"], "evitar": "Frase profunda sem conteúdo."},
+          {"id": "handley", "nome": "Ann Handley", "resumo": "Escrita de marca humana, empatia, clareza.", "tecnicas": ["Escreve do ponto de vista do leitor", "Corta o jargão corporativo", "Voz consistente e calorosa"], "evitar": "Fofura forçada."},
+          {"id": "housel", "nome": "Morgan Housel", "resumo": "História curta que vira lição universal.", "tecnicas": ["Abre com uma história real e curta", "Extrai um princípio simples", "Frases curtas que podem ser citadas"], "evitar": "Lição sem história concreta."},
+          {"id": "paul-graham", "nome": "Paul Graham", "resumo": "Ensaio claro, raciocínio passo a passo, linguagem simples.", "tecnicas": ["Uma pergunta guia o texto", "Cada passo do raciocínio visível", "Palavra comum no lugar de termo técnico"], "evitar": "Tom de quem já sabe tudo."},
+          {"id": "olivetto", "nome": "Washington Olivetto", "resumo": "Criatividade publicitária brasileira, humor, sacada.", "tecnicas": ["Uma sacada central simples", "Humor e afeto brasileiros", "Verdade do cotidiano como ponto de partida"], "evitar": "Trocadilho fraco."},
+          {"id": "verissimo", "nome": "Luis Fernando Verissimo", "resumo": "Crônica, cotidiano com graça, observação fina.", "tecnicas": ["Situação banal observada de perto", "Diálogo curto e engraçado", "Final com virada leve"], "evitar": "Piada que não conversa com o tema."}
+        ]
+      },
+      {
+        "id": "jornalismo-digital",
+        "nome": "Jornalismo e comunicação digital",
+        "itens": [
+          {"id": "talese", "nome": "Gay Talese", "resumo": "New journalism: reportagem com técnica de romance.", "tecnicas": ["Cena com detalhe que revela a pessoa", "Diálogo real reconstruído com rigor", "Observa antes de explicar"], "evitar": "Inventar cena."},
+          {"id": "didion", "nome": "Joan Didion", "resumo": "Frase fria e precisa, observação pessoal que lê uma época.", "tecnicas": ["Detalhe exato no lugar do adjetivo", "Primeira pessoa contida", "Ritmo seco que cria tensão"], "evitar": "Frieza em texto que pede acolhimento."},
+          {"id": "eliane-brum", "nome": "Eliane Brum", "resumo": "Reportagem humana, escuta de quem não é ouvido.", "tecnicas": ["A pessoa fala com as próprias palavras", "Detalhe do cotidiano como prova da desigualdade", "Comove sem apelar"], "evitar": "Usar dor alheia como enfeite."},
+          {"id": "gladwell", "nome": "Malcolm Gladwell", "resumo": "Caso curioso → padrão escondido → ideia contraintuitiva.", "tecnicas": ["Abre com uma história que parece não ter relação", "Revela o padrão por trás", "Conclusão que contraria o senso comum"], "evitar": "Forçar a teoria além da evidência."},
+          {"id": "gaspari", "nome": "Elio Gaspari", "resumo": "Frase seca e certeira, ironia política, bastidor.", "tecnicas": ["Frases curtas e afirmativas", "Ironia de uma palavra só", "Fato de bastidor com fonte"], "evitar": "Ironia sem informação."},
+          {"id": "tim-urban", "nome": "Tim Urban", "resumo": "Explica o complexo com humor, analogia e desenho tosco.", "tecnicas": ["Progressão em degraus, do simples ao complexo", "Analogias absurdas que funcionam", "Conversa com o próprio leitor confuso"], "evitar": "Texto longo demais para o canal."},
+          {"id": "ben-thompson", "nome": "Ben Thompson", "resumo": "Análise de estratégia com framework próprio.", "tecnicas": ["Aplica um modelo mental a uma notícia", "Separa o que é fato do que é análise", "Conclusão sobre o que vem a seguir"], "evitar": "Jargão de consultoria."},
+          {"id": "nicolas-cole", "nome": "Nicolas Cole", "resumo": "Escrita para internet: títulos testáveis, texto escaneável.", "tecnicas": ["Título com número, público e resultado", "Linhas curtas e listas com propósito", "Uma ideia por peça"], "evitar": "Fórmula aparente demais."},
+          {"id": "justin-welsh", "nome": "Justin Welsh", "resumo": "Post de criador solo: abertura de uma linha, lição prática.", "tecnicas": ["Primeira linha que para a rolagem", "Experiência própria como prova", "Passos aplicáveis hoje"], "evitar": "Humblebrag."},
+          {"id": "icaro-de-carvalho", "nome": "Ícaro de Carvalho", "resumo": "Copy digital brasileira, storytelling de venda, provocação.", "tecnicas": ["História pessoal que leva à oferta", "Provocação contra o senso comum do mercado", "Posicionamento forte e linguagem coloquial"], "evitar": "Agressividade sem prova."}
+        ]
+      },
+      {
+        "id": "mulheres",
+        "nome": "Mulheres",
+        "itens": [
+          {"id": "clarice", "nome": "Clarice Lispector", "resumo": "Introspecção, epifania no banal, frase que pensa enquanto é escrita.", "tecnicas": ["Um momento banal vira revelação", "Frase que se corrige e se aprofunda", "Pergunta sem resposta pronta"], "evitar": "Hermetismo em texto de serviço."},
+          {"id": "adelia-prado", "nome": "Adélia Prado", "resumo": "O sagrado no cotidiano doméstico, voz de mulher sem pedir licença.", "tecnicas": ["Objetos da casa como imagem poética", "Fé e corpo na mesma frase", "Simplicidade com profundidade"], "evitar": "Religiosidade fora de contexto."},
+          {"id": "martha-medeiros", "nome": "Martha Medeiros", "resumo": "Crônica de relacionamentos, conversa franca.", "tecnicas": ["Situação afetiva comum descrita com franqueza", "Opinião clara sem tom de autoajuda", "Frases que o leitor quer compartilhar"], "evitar": "Clichê romântico."},
+          {"id": "woolf", "nome": "Virginia Woolf", "resumo": "Fluxo de consciência, o tempo interno.", "tecnicas": ["Segue o pensamento da pessoa, não o relógio", "Detalhe sensorial abre memória", "Frase longa e fluida intercalada com curta"], "evitar": "Usar em texto curto e prático."},
+          {"id": "beauvoir", "nome": "Simone de Beauvoir", "resumo": "Argumento filosófico com experiência vivida.", "tecnicas": ["Questiona o que parece natural", "Une conceito e exemplo da vida", "Rigor argumentativo"], "evitar": "Academicismo sem leitor."},
+          {"id": "bell-hooks", "nome": "bell hooks", "resumo": "Teoria em linguagem acessível, amor e política juntos.", "tecnicas": ["Explica conceito com experiência própria", "Linguagem que convida", "Crítica com proposta"], "evitar": "Sermão."},
+          {"id": "adichie", "nome": "Chimamanda Ngozi Adichie", "resumo": "Narrativa que desmonta estereótipos, humor sutil.", "tecnicas": ["Caso pessoal leva à ideia universal", "Humor que desarma", "Convence sem gritar"], "evitar": "Generalizar sobre grupos."},
+          {"id": "brene-brown", "nome": "Brené Brown", "resumo": "Vulnerabilidade como força, pesquisa em primeira pessoa.", "tecnicas": ["Confissão + dado de pesquisa", "Nomeia a emoção com precisão", "Convite à coragem prática"], "evitar": "Autoajuda genérica."},
+          {"id": "nora-ephron", "nome": "Nora Ephron", "resumo": "Ensaio pessoal engraçado, autoironia, detalhe específico.", "tecnicas": ["Detalhe específico que todo mundo reconhece", "Autoironia antes de criticar o outro", "Listas engraçadas"], "evitar": "Piada às custas do leitor."},
+          {"id": "ferrante", "nome": "Elena Ferrante", "resumo": "Intensidade emocional, franqueza desconfortável.", "tecnicas": ["Admite sentimentos que ninguém admite", "Relações (amizade, família) como tensão", "Prosa direta, sem enfeite"], "evitar": "Melodrama."}
+        ]
+      },
+      {
+        "id": "especialistas-de-area",
+        "nome": "Especialistas de área",
+        "itens": [
+          {"id": "gawande", "nome": "Atul Gawande", "resumo": "Médico e escritor: caso clínico que abre o problema do sistema.", "tecnicas": ["Abre com um paciente (anonimizado)", "Admite a dúvida do próprio médico", "Sobe do caso para a falha do sistema"], "evitar": "Expor paciente."},
+          {"id": "drauzio", "nome": "Drauzio Varella", "resumo": "Linguagem de consultório, sem jargão, sem condescendência.", "tecnicas": ["Explica como explicaria a um paciente", "Exemplo brasileiro", "Recomendação prática e prudente"], "evitar": "Tom paternalista."},
+          {"id": "ed-yong", "nome": "Ed Yong", "resumo": "Ciência em tempo real sem esconder a incerteza.", "tecnicas": ["Diz o que se sabe, o que não se sabe e por quê", "Várias fontes especialistas", "Metáfora precisa para biologia"], "evitar": "Certeza falsa."},
+          {"id": "atila", "nome": "Átila Iamarino", "resumo": "Divulgação científica brasileira em linguagem de internet.", "tecnicas": ["Pergunta curiosa como gancho", "Explicação passo a passo com fontes", "Linguagem informal e precisa"], "evitar": "Informalidade que vira imprecisão."}
+        ]
+      }
+    ]
+  },
+  "veiculos": {
+    "titulo": "Veículos",
+    "camada": "Estrutura: como a ideia é montada e organizada",
+    "grupos": [
+      {
+        "id": "serios",
+        "nome": "Sérios",
+        "itens": [
+          {"id": "nyt", "nome": "The New York Times", "resumo": "Lide forte, contexto, fontes, equilíbrio.", "tecnicas": ["Lide com o fato mais importante", "Parágrafo de contexto ('nut graf') explicando por que importa", "Fontes nomeadas dos dois lados"], "evitar": "Opinião misturada com notícia."},
+          {"id": "economist", "nome": "The Economist", "resumo": "Opinião assumida, argumento enxuto, ironia britânica.", "tecnicas": ["Tese clara já no começo", "Dados comparativos entre países ou períodos", "Ironia discreta em títulos"], "evitar": "Arrogância."},
+          {"id": "piaui", "nome": "revista piauí", "resumo": "Jornalismo literário, cena e detalhe, texto longo.", "tecnicas": ["Abre em cena", "Personagem guia o leitor pelo tema", "Detalhe inusitado que revela"], "evitar": "Formato curto."},
+          {"id": "nexo", "nome": "Nexo Jornal", "resumo": "Explicativo: 'entenda em 5 pontos', didático.", "tecnicas": ["Pergunta-título", "Seções curtas com intertítulo", "Gráfico ou dado explicado"], "evitar": "Tom escolar."}
+        ]
+      },
+      {
+        "id": "comedia",
+        "nome": "Comédia",
+        "itens": [
+          {"id": "the-onion", "nome": "The Onion", "resumo": "Notícia absurda com cara de jornal sério.", "tecnicas": ["Formato de notícia perfeito", "Premissa absurda que revela uma verdade", "Seriedade total no tom"], "evitar": "Ser confundido com notícia real: sempre rotular."},
+          {"id": "sensacionalista", "nome": "Sensacionalista", "resumo": "O modelo Onion com referência brasileira.", "tecnicas": ["Manchete absurda sobre comportamento brasileiro", "Texto curto", "Crítica de costumes"], "evitar": "Pessoa real em situação falsa."},
+          {"id": "last-week-tonight", "nome": "Last Week Tonight", "resumo": "Humor que informa: piada + dado + indignação.", "tecnicas": ["Tema sério explicado em profundidade", "Piada a cada dado pesado", "Chamado à ação no final"], "evitar": "Piada que desmerece vítimas."}
+        ]
+      },
+      {
+        "id": "drama",
+        "nome": "Drama",
+        "itens": [
+          {"id": "the-moth", "nome": "The Moth", "resumo": "História pessoal real, vulnerabilidade, arco de transformação.", "tecnicas": ["Primeira pessoa, presente narrativo", "Momento de virada claro", "Fecho sobre o que mudou"], "evitar": "Inventar história pessoal."},
+          {"id": "serial", "nome": "Serial", "resumo": "Suspense investigativo, gancho no final de cada parte.", "tecnicas": ["Pergunta central que não se resolve logo", "Narrador que investiga junto", "Gancho no fim de cada parte"], "evitar": "Suspense falso."},
+          {"id": "novela", "nome": "Telenovela brasileira", "resumo": "Emoção à flor da pele, conflito e reviravolta.", "tecnicas": ["Conflito entre pessoas, não ideias", "Reviravolta no fim do bloco", "Diálogo emocional direto"], "evitar": "Exagero em texto de serviço."}
+        ]
+      },
+      {
+        "id": "roteiro",
+        "nome": "Roteiros de filme e série",
+        "itens": [
+          {"id": "sorkin", "nome": "Aaron Sorkin (The West Wing, A Rede Social)", "resumo": "Diálogo rápido e inteligente, ritmo de argumento.", "tecnicas": ["Troca rápida de falas", "Argumento construído em réplicas", "Repetição como ritmo"], "evitar": "Todo mundo falar igual."},
+          {"id": "breaking-bad", "nome": "Breaking Bad", "resumo": "Tensão lenta, mostrar em vez de dizer, consequência.", "tecnicas": ["Detalhe visual que carrega o significado", "Silêncio e pausa", "Cada ação tem consequência adiante"], "evitar": "Lentidão em post."},
+          {"id": "succession", "nome": "Succession", "resumo": "Diálogo cortante, poder, subtexto.", "tecnicas": ["O que não é dito importa mais", "Humor ácido entre pessoas poderosas", "Frases curtas e afiadas"], "evitar": "Cinismo em marca acolhedora."}
+        ]
+      },
+      {
+        "id": "digitais-mundiais",
+        "nome": "Digitais e referências mundiais",
+        "itens": [
+          {"id": "new-yorker", "nome": "The New Yorker", "resumo": "Perfil longo, ironia elegante, detalhe de caráter.", "tecnicas": ["Abertura lenta e precisa", "Detalhe que revela caráter", "Ironia elegante"], "evitar": "Formato curto."},
+          {"id": "atlantic", "nome": "The Atlantic", "resumo": "Ensaio de ideias, tese ambiciosa defendida com calma.", "tecnicas": ["Tese grande no título", "Argumento com história e dado", "Reconhece o contra-argumento"], "evitar": "Tese sem prova."},
+          {"id": "guardian", "nome": "The Guardian", "resumo": "Jornalismo com causa, tom humano, opinião clara.", "tecnicas": ["Personagem afetado pelo tema", "Posição editorial transparente", "Linguagem acessível"], "evitar": "Militância sem dado."},
+          {"id": "bbc", "nome": "BBC", "resumo": "Clareza internacional, neutralidade, frase curta.", "tecnicas": ["Frases curtas e diretas", "Contexto para quem nunca ouviu falar", "Lados apresentados com o mesmo tom"], "evitar": "Neutralidade que esconde fato."},
+          {"id": "bloomberg", "nome": "Bloomberg", "resumo": "Número no topo, impacto no bolso, linguagem de mercado.", "tecnicas": ["Número principal no lide", "O que muda para quem investe/consome", "Comparação com período anterior"], "evitar": "Jargão sem explicação."},
+          {"id": "wired", "nome": "Wired", "resumo": "Tecnologia como cultura, futuro com entusiasmo crítico.", "tecnicas": ["Pessoa por trás da tecnologia", "Entusiasmo + pergunta crítica", "Contexto cultural"], "evitar": "Hype."},
+          {"id": "vox", "nome": "Vox", "resumo": "O explicador: 'por que isso importa' e o tema em partes.", "tecnicas": ["Resposta curta no topo", "Partes com perguntas como intertítulo", "Gráfico/analogia"], "evitar": "Didatismo excessivo."},
+          {"id": "axios", "nome": "Axios", "resumo": "Smart brevity: tópicos em negrito, zero gordura.", "tecnicas": ["Uma frase de fato + 'Por que importa'", "Tópicos curtos com rótulo em negrito", "'O que vem a seguir'"], "evitar": "Telegráfico demais para emoção."},
+          {"id": "morning-brew", "nome": "Morning Brew", "resumo": "Newsletter de negócios com piada, intimidade e ritmo.", "tecnicas": ["Notícia + piada leve", "Conversa com o leitor", "Blocos curtos"], "evitar": "Piada em tema trágico."},
+          {"id": "el-pais", "nome": "El País", "resumo": "Crônica jornalística latina, análise com sensibilidade cultural.", "tecnicas": ["Fato contado com contexto cultural", "Análise com voz autoral", "Olhar latino-americano"], "evitar": "Floreio."},
+          {"id": "meio", "nome": "Meio", "resumo": "Newsletter brasileira: curadoria e contexto em 10 minutos.", "tecnicas": ["Seleção do que importa no dia", "Contexto curto para cada item", "Tom inteligente e direto"], "evitar": "Lista sem hierarquia."}
+        ]
+      },
+      {
+        "id": "nicho",
+        "nome": "Referências de nicho",
+        "itens": [
+          {"id": "jota", "nome": "JOTA", "resumo": "Jornalismo jurídico: precisão e dispositivo legal exato.", "tecnicas": ["Cita lei, artigo e decisão", "Explica impacto prático", "Linguagem técnica correta"], "evitar": "Juridiquês para leigo."},
+          {"id": "migalhas", "nome": "Migalhas", "resumo": "Informativo jurídico rápido e direto.", "tecnicas": ["Notícia curta com o essencial", "Link à decisão/norma", "Título objetivo"], "evitar": "Falta de contexto para leigo."},
+          {"id": "quanta", "nome": "Quanta Magazine", "resumo": "Ciência de ponta explicada sem perder precisão.", "tecnicas": ["Pergunta científica como fio", "Cientistas falando da dúvida", "Analogia com limite explicado"], "evitar": "Analogia enganosa."},
+          {"id": "pesquisa-fapesp", "nome": "Pesquisa FAPESP", "resumo": "Ciência brasileira com contexto e fonte.", "tecnicas": ["Pesquisa nacional com instituição e financiamento", "Método explicado", "Aplicação possível sem exagero"], "evitar": "Promessa de aplicação."},
+          {"id": "porvir", "nome": "Porvir", "resumo": "Educação: exemplo prático de escola real.", "tecnicas": ["Caso de escola com nome e lugar", "Como replicar", "Voz de professor e aluno"], "evitar": "Inovação como clichê."}
+        ]
+      }
+    ]
+  },
+  "tons": {
+    "titulo": "Tons",
+    "camada": "Posicionamento: a postura de quem fala diante de quem lê",
+    "grupos": [
+      {"id": "informar", "nome": "Informar", "itens": [
+        {"id": "jornalistico-neutro", "nome": "Jornalístico neutro", "resumo": "Fato, fonte, sem adjetivo de juízo.", "tecnicas": ["Terceira pessoa", "Atribuição de toda informação", "Verbos neutros (disse, afirmou)"], "evitar": "Adjetivo valorativo."},
+        {"id": "didatico", "nome": "Didático", "resumo": "Professor paciente.", "tecnicas": ["Do simples ao complexo", "Exemplo a cada conceito", "Retoma o que já foi dito"], "evitar": "Condescendência."},
+        {"id": "analitico", "nome": "Analítico", "resumo": "Dados e raciocínio à vista.", "tecnicas": ["Premissa → evidência → conclusão", "Comparação", "Limites da análise"], "evitar": "Frieza sem 'e daí?'."},
+        {"id": "tecnico", "nome": "Técnico", "resumo": "Preciso, sem floreio.", "tecnicas": ["Termo exato", "Frase com uma leitura só", "Unidades e números corretos"], "evitar": "Jargão para leigo."},
+        {"id": "explicativo", "nome": "Explicativo", "resumo": "'Entenda': responde as perguntas na ordem.", "tecnicas": ["Pergunta como intertítulo", "Resposta curta primeiro", "Analogia"], "evitar": "Repetir a pergunta na resposta."}
+      ]},
+      {"id": "convencer", "nome": "Convencer", "itens": [
+        {"id": "autoridade", "nome": "Autoridade", "resumo": "Especialista que já viu tudo.", "tecnicas": ["Afirmação segura com prova", "Experiência concreta", "Sem pedir licença"], "evitar": "Arrogância."},
+        {"id": "provocador", "nome": "Provocador", "resumo": "Contraria o óbvio.", "tecnicas": ["Abre negando um consenso", "Sustenta com argumento", "Admite onde o consenso acerta"], "evitar": "Polêmica vazia."},
+        {"id": "manifesto", "nome": "Manifesto", "resumo": "Convicção e causa.", "tecnicas": ["Crenças em primeira pessoa do plural", "Repetição rítmica", "Convite a aderir"], "evitar": "Grandiloquência."},
+        {"id": "consultivo", "nome": "Consultivo", "resumo": "Conselheiro de confiança.", "tecnicas": ["Diagnóstico antes da recomendação", "Opções com prós e contras", "Recomendação clara"], "evitar": "Vender disfarçado."},
+        {"id": "urgente", "nome": "Urgente", "resumo": "Prazo real, sem histeria.", "tecnicas": ["Data e motivo concretos", "Custo de esperar", "Uma ação"], "evitar": "Urgência falsa."}
+      ]},
+      {"id": "conectar", "nome": "Conectar", "itens": [
+        {"id": "confessional", "nome": "Confessional", "resumo": "Primeira pessoa, vulnerável.", "tecnicas": ["Admite erro ou medo", "Detalhe íntimo verdadeiro", "Aprendizado sem lição de moral"], "evitar": "Vulnerabilidade como tática óbvia."},
+        {"id": "conversa-de-bar", "nome": "Conversa de bar", "resumo": "Íntimo e informal.", "tecnicas": ["Você e a gente", "Expressões coloquiais brasileiras", "Frases incompletas como na fala"], "evitar": "Gíria forçada."},
+        {"id": "acolhedor", "nome": "Acolhedor", "resumo": "Empático, sem julgamento.", "tecnicas": ["Valida a situação do leitor", "Linguagem gentil e concreta", "Próximo passo pequeno"], "evitar": "Melosidade."},
+        {"id": "nostalgico", "nome": "Nostálgico", "resumo": "Memória compartilhada.", "tecnicas": ["Objeto ou cena de época", "Sensação física", "Ponte com o presente"], "evitar": "'Antigamente era melhor'."},
+        {"id": "inspirador", "nome": "Inspirador", "resumo": "Eleva sem frase de coach.", "tecnicas": ["História real de superação concreta", "Detalhe do esforço", "Convite possível"], "evitar": "Frases motivacionais genéricas."}
+      ]},
+      {"id": "entreter", "nome": "Entreter", "itens": [
+        {"id": "ironico", "nome": "Irônico", "resumo": "Diz o contrário para revelar o óbvio.", "tecnicas": ["Seriedade fingida", "Exagero calculado", "Uma piada por bloco"], "evitar": "Ironia que o público não percebe."},
+        {"id": "sarcastico", "nome": "Sarcástico", "resumo": "Ironia com alvo.", "tecnicas": ["Alvo é ideia ou comportamento", "Frase curta e afiada", "Sem crueldade"], "evitar": "Atacar o cliente/leitor."},
+        {"id": "absurdo", "nome": "Absurdo", "resumo": "Lógica impossível levada a sério.", "tecnicas": ["Premissa absurda", "Desenvolvimento lógico", "Final inesperado"], "evitar": "Absurdo sem ligação com a mensagem."},
+        {"id": "autodepreciativo", "nome": "Autodepreciativo", "resumo": "Ri de si antes de rir do mundo.", "tecnicas": ["Admite o próprio defeito com humor", "Gera simpatia", "Volta ao ponto sério"], "evitar": "Diminuir a credibilidade."},
+        {"id": "cronica-leve", "nome": "Crônica leve", "resumo": "Humor de observação do cotidiano.", "tecnicas": ["Situação comum", "Observação inesperada", "Final com sorriso"], "evitar": "Piada pronta."}
+      ]},
+      {"id": "impressionar", "nome": "Impressionar", "itens": [
+        {"id": "solene", "nome": "Solene/épico", "resumo": "Grandeza e peso.", "tecnicas": ["Frases longas e ritmadas", "Vocabulário elevado pontual", "Pausa antes da frase principal"], "evitar": "Usar em assunto banal (vira paródia)."},
+        {"id": "poetico", "nome": "Poético", "resumo": "Imagem e ritmo.", "tecnicas": ["Metáfora concreta", "Som das palavras", "Use na abertura e no fecho"], "evitar": "Poesia que esconde a informação."},
+        {"id": "minimalista", "nome": "Minimalista", "resumo": "Pouco e certeiro.", "tecnicas": ["Corta tudo que não é essencial", "Espaço em branco", "Uma frase forte"], "evitar": "Vagueza."},
+        {"id": "luxo", "nome": "Luxo/sofisticado", "resumo": "Contenção e exclusividade.", "tecnicas": ["Detalhe de material e processo", "Nada de exclamação", "Silêncio sobre preço"], "evitar": "'Exclusivo' e 'premium' como adjetivo."},
+        {"id": "misterioso", "nome": "Misterioso", "resumo": "Revela aos poucos.", "tecnicas": ["Informação incompleta no começo", "Pistas", "Revelação no final"], "evitar": "Mistério que irrita."}
+      ]}
+    ]
+  },
+  "referencias": {
+    "titulo": "Jogadas de referência",
+    "camada": "Uma jogada específica, já provada, que entra no texto",
+    "grupos": [
+      {"id": "publicidade-classica", "nome": "Publicidade clássica", "itens": [
+        {"id": "think-small", "nome": "\"Think Small\", Volkswagen (DDB, 1959)", "resumo": "Transforma defeito em virtude com honestidade.", "tecnicas": ["Assume a característica que parece fraca", "Mostra por que ela é vantagem", "Muito espaço, pouca palavra"], "evitar": "Fingir defeito que não existe."},
+        {"id": "we-try-harder", "nome": "\"We Try Harder\", Avis (DDB, 1962)", "resumo": "Ser o segundo como argumento de esforço.", "tecnicas": ["Admite a posição inferior", "Transforma em promessa de atitude", "Provas do esforço"], "evitar": "Ataque ao concorrente."},
+        {"id": "rolls-royce", "nome": "Rolls-Royce, de David Ogilvy (1958)", "resumo": "Título feito de um fato concreto.", "tecnicas": ["Um fato surpreendente e verificável no título", "Lista de provas no corpo", "Zero adjetivo"], "evitar": "Fato não verificado."},
+        {"id": "think-different", "nome": "\"Think Different\", Apple (1997)", "resumo": "A marca fala de quem admira, não de si.", "tecnicas": ["Exalta um tipo de pessoa", "O produto quase não aparece", "Manifesto de identidade"], "evitar": "Usar nomes de pessoas reais sem direito."},
+        {"id": "just-do-it", "nome": "\"Just Do It\", Nike (1988)", "resumo": "Três palavras, uma postura de vida.", "tecnicas": ["Imperativo curto", "Atitude no lugar do produto", "Universal e pessoal ao mesmo tempo"], "evitar": "Slogan genérico."},
+        {"id": "priceless", "nome": "\"Priceless\", Mastercard (1997)", "resumo": "Estrutura repetível: itens com preço, fim sem preço.", "tecnicas": ["Lista de coisas com valor", "Último item emocional", "Fórmula repetível em série"], "evitar": "Copiar o bordão."}
+      ]},
+      {"id": "marcas-modernas", "nome": "Marcas modernas", "itens": [
+        {"id": "patagonia", "nome": "\"Don't Buy This Jacket\", Patagonia (2011)", "resumo": "Pedir para não comprar prova o valor.", "tecnicas": ["Contraria o objetivo óbvio da peça", "Justifica com causa real", "Coerência com a prática da marca"], "evitar": "Usar sem coerência real."},
+        {"id": "old-spice", "nome": "\"The Man Your Man Could Smell Like\", Old Spice (2010)", "resumo": "Absurdo em ritmo acelerado.", "tecnicas": ["Fala direta com o público", "Sequência de absurdos encadeados", "Confiança total do narrador"], "evitar": "Absurdo sem ritmo."},
+        {"id": "dove-sketches", "nome": "\"Real Beauty Sketches\", Dove (2013)", "resumo": "Experimento real gera a emoção.", "tecnicas": ["Mostra um teste, não uma promessa", "Revelação emocional", "Produto quase ausente"], "evitar": "Experimento encenado vendido como real."},
+        {"id": "spotify-wrapped", "nome": "Spotify Wrapped", "resumo": "Dado do próprio usuário vira história.", "tecnicas": ["Personaliza com dado real do cliente", "Formato compartilhável", "Elogio ao usuário"], "evitar": "Dado inventado."}
+      ]},
+      {"id": "venda-direta", "nome": "Venda direta", "itens": [
+        {"id": "two-young-men", "nome": "Carta \"Two Young Men\", Wall Street Journal (Martin Conroy, 1975)", "resumo": "Dois destinos, o produto é a diferença.", "tecnicas": ["Duas pessoas parecidas no começo", "Destinos diferentes depois", "A diferença é a decisão que o produto representa"], "evitar": "Promessa de resultado."}
+      ]},
+      {"id": "brasil", "nome": "Brasil", "itens": [
+        {"id": "folha-hitler", "nome": "\"Hitler\", Folha de S.Paulo (W/Brasil, 1987)", "resumo": "Fatos verdadeiros montam uma mentira.", "tecnicas": ["Sequência de verdades isoladas", "Revelação que muda a leitura", "Mensagem sobre interpretação"], "evitar": "Usar com tema que banalize tragédia."},
+        {"id": "primeiro-sutia", "nome": "\"O primeiro sutiã\", Valisère (1987)", "resumo": "Momento universal contado com delicadeza.", "tecnicas": ["Rito de passagem comum", "Detalhe afetivo", "A marca vira memória"], "evitar": "Pieguice."}
+      ]},
+      {"id": "discursos", "nome": "Discursos", "itens": [
+        {"id": "gettysburg", "nome": "Discurso de Gettysburg, Abraham Lincoln (1863)", "resumo": "Menos de 300 palavras, passado-presente-futuro.", "tecnicas": ["Estrutura em três tempos", "Concisão extrema", "Dedicação a uma causa"], "evitar": "Solenidade fora de lugar."},
+        {"id": "i-have-a-dream", "nome": "\"I Have a Dream\", Martin Luther King Jr. (1963)", "resumo": "Anáfora que cresce, imagem concreta.", "tecnicas": ["Repetição de uma expressão no início das frases", "Imagens concretas do futuro", "Crescendo de ritmo"], "evitar": "Copiar o bordão."},
+        {"id": "jobs-stanford", "nome": "Discurso de Stanford, Steve Jobs (2005)", "resumo": "Três histórias, uma lição em cada.", "tecnicas": ["Anuncia 'três histórias'", "Cada uma com lição", "Fecho memorável curto"], "evitar": "Lições genéricas."},
+        {"id": "this-is-water", "nome": "\"This Is Water\", David Foster Wallace (2005)", "resumo": "Parábola que desmonta o clichê.", "tecnicas": ["Abre com parábola", "Reconhece o próprio clichê", "Verdade desconfortável com humildade"], "evitar": "Tom superior."}
+      ]},
+      {"id": "palestras-digitais", "nome": "Palestras e textos digitais", "itens": [
+        {"id": "single-story", "nome": "\"The Danger of a Single Story\", Chimamanda Adichie (TED, 2009)", "resumo": "Caso pessoal cresce para ideia universal.", "tecnicas": ["Memória pessoal", "Humor no meio", "Conceito nomeado e generalizado"], "evitar": "Experiência alheia contada como própria."},
+        {"id": "vulnerability", "nome": "\"The Power of Vulnerability\", Brené Brown (TED, 2010)", "resumo": "Pesquisadora que se expõe: dado e confissão.", "tecnicas": ["Pesquisa como fio", "Confissão que contradiz a própria pesquisadora", "Conclusão prática"], "evitar": "Confissão inventada."},
+        {"id": "snow-fall", "nome": "\"Snow Fall\", The New York Times (2012)", "resumo": "Longform digital: texto, mídia e ritmo de rolagem.", "tecnicas": ["Seções com abertura visual", "Narrativa cronológica com tensão", "Mídia que explica, não enfeita"], "evitar": "Multimídia vazia."},
+        {"id": "dont-scale", "nome": "\"Do Things That Don't Scale\", Paul Graham (2013)", "resumo": "Conselho contraintuitivo com exemplos reais.", "tecnicas": ["Título que contraria o senso comum", "Exemplos reais de empresas", "Linguagem simples"], "evitar": "Contraintuitivo sem prova."},
+        {"id": "ai-revolution", "nome": "\"The AI Revolution\", Wait But Why (2015)", "resumo": "Assunto difícil em degraus, com humor.", "tecnicas": ["Degraus de complexidade", "Gráfico tosco/analogia", "Leitor confuso como personagem"], "evitar": "Comprimento sem pausa."}
+      ]}
+    ]
+  },
+  "modulos": [
+    {"id": "carrossel-financas", "nome": "Carrossel · Finanças", "tipo": "carrossel", "preset": {"principal": "housel", "secundarios": [], "veiculo": "morning-brew", "tons": ["didatico", "conversa-de-bar"], "jogadas": ["two-young-men"]}},
+    {"id": "carrossel-saude", "nome": "Carrossel · Saúde", "tipo": "carrossel", "preset": {"principal": "feynman", "secundarios": [], "veiculo": "vox", "tons": ["didatico", "acolhedor"], "jogadas": []}},
+    {"id": "carrossel-advocacia", "nome": "Carrossel · Advocacia", "tipo": "carrossel", "preset": {"principal": "paul-graham", "secundarios": [], "veiculo": "nexo", "tons": ["didatico", "consultivo"], "jogadas": ["think-small"]}},
+    {"id": "carrossel-marketing", "nome": "Carrossel · Marketing", "tipo": "carrossel", "preset": {"principal": "justin-welsh", "secundarios": ["nicolas-cole"], "veiculo": "morning-brew", "tons": ["didatico", "provocador"], "jogadas": []}},
+    {"id": "materia-politica", "nome": "Matéria · Política", "tipo": "materia", "preset": {"principal": "paul-graham", "secundarios": [], "veiculo": "bbc", "tons": ["jornalistico-neutro", "explicativo"], "jogadas": []}},
+    {"id": "materia-educacao", "nome": "Matéria · Educação", "tipo": "materia", "preset": {"principal": "eliane-brum", "secundarios": [], "veiculo": "piaui", "tons": ["jornalistico-neutro", "acolhedor"], "jogadas": []}},
+    {"id": "materia-saude", "nome": "Matéria · Saúde", "tipo": "materia", "preset": {"principal": "gawande", "secundarios": ["ed-yong"], "veiculo": "vox", "tons": ["explicativo", "acolhedor"], "jogadas": []}},
+    {"id": "materia-ciencia", "nome": "Matéria · Ciência", "tipo": "materia", "preset": {"principal": "sagan", "secundarios": ["feynman"], "veiculo": "wired", "tons": ["explicativo", "poetico"], "jogadas": []}},
+    {"id": "livre", "nome": "Livre (qualquer texto)", "tipo": "livre", "preset": null}
+  ]
+}

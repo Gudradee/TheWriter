@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>the Writer: monte seu perfil de escrita</title>
+<meta name="description" content="Monte um perfil de escrita (autor, veículo, tom e jogadas de referência) e gere o comando para a skill the Writer no Claude.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --petroleo:#375A59;
+    --petroleo-fundo:#24403F;
+    --petroleo-claro:#E9F0EF;
+    --nevoa:#F5F8F7;
+    --tinta:#1C2827;
+    --tinta-suave:#5E6F6E;
+    --linha:#DCE5E4;
+    --branco:#FFFFFF;
+    --raio-g:22px; --raio-m:14px; --raio-p:999px;
+    --ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --serifa:"Newsreader",Georgia,"Times New Roman",serif;
+    --mola:cubic-bezier(.32,.72,0,1);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--branco);color:var(--tinta);font-family:var(--ui);font-size:17px;line-height:1.47;letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
+  button,input,textarea,select{font:inherit;color:inherit;letter-spacing:inherit}
+  :focus-visible{outline:3px solid color-mix(in srgb,var(--petroleo) 55%,transparent);outline-offset:2px;border-radius:10px}
+
+  /* barra superior translúcida */
+  .barra{position:sticky;top:0;z-index:20;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-left));background:rgba(255,255,255,.78);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06)}
+  .barra img{height:22px;display:block}
+  .barra nav{display:flex;gap:22px;font-size:14px}
+  .barra a{color:var(--tinta-suave);text-decoration:none}
+  .barra a:hover{color:var(--petroleo)}
+
+  /* abertura */
+  .abertura{max-width:1080px;margin:0 auto;padding:72px 24px 28px;text-align:center}
+  .abertura .logo-grande{width:min(520px,82vw);height:auto;display:block;margin:0 auto 26px}
+  .abertura p{max-width:600px;margin:0 auto;font-size:21px;line-height:1.38;color:var(--tinta-suave);letter-spacing:-.02em}
+
+  /* layout configurador */
+  .config{max-width:1180px;margin:0 auto;padding:24px 24px 120px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:56px;align-items:start}
+  .passo{padding:40px 0;border-top:1px solid var(--linha)}
+  .passo:first-child{border-top:0;padding-top:8px}
+  .passo h2{font-size:28px;line-height:1.14;font-weight:600;letter-spacing:-.03em;margin:0 0 6px;display:flex;gap:12px;align-items:baseline}
+  .passo h2 .n{font-size:15px;font-weight:600;color:var(--petroleo);min-width:22px}
+  .passo .ajuda{margin:0 0 20px 34px;color:var(--tinta-suave);font-size:15px;max-width:58ch}
+  .corpo{margin-left:34px}
+
+  /* controle segmentado */
+  .seg{display:inline-flex;background:var(--nevoa);border:1px solid var(--linha);border-radius:var(--raio-p);padding:3px;gap:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{border:0;background:transparent;padding:7px 15px;border-radius:var(--raio-p);font-size:14px;white-space:nowrap;cursor:pointer;color:var(--tinta-suave);transition:background .25s var(--mola),color .25s}
+  .seg button[aria-pressed="true"]{background:var(--branco);color:var(--tinta);box-shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.04)}
+  .linha-ctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+  .busca{flex:1 1 200px;min-width:0;border:1px solid var(--linha);background:var(--branco);border-radius:var(--raio-p);padding:8px 16px;font-size:15px}
+  .busca:focus{outline:none;border-color:var(--petroleo)}
+
+  /* módulos */
+  .modulos{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+  .modulo{text-align:left;border:1.5px solid var(--linha);background:var(--branco);border-radius:var(--raio-m);padding:16px 16px 14px;cursor:pointer;transition:border-color .2s,background .2s}
+  .modulo strong{display:block;font-size:16px;font-weight:600}
+  .modulo span{font-size:13px;color:var(--tinta-suave)}
+  .modulo:hover{border-color:#b9cac9}
+  .modulo[aria-pressed="true"]{border-color:var(--petroleo);background:var(--petroleo-claro)}
+
+  /* fichas (chips) */
+  .grupo-nome{font-size:13px;color:var(--tinta-suave);margin:18px 0 8px;font-weight:500}
+  .grupo-nome:first-child{margin-top:0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--linha);background:var(--branco);border-radius:var(--raio-p);padding:8px 14px;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .2s,border-color .2s,color .2s,transform .15s}
+  .chip:hover{border-color:#b9cac9}
+  .chip:active{transform:scale(.97)}
+  .chip[data-papel="principal"],.chip[data-papel="sim"]{background:var(--petroleo);border-color:var(--petroleo);color:var(--branco)}
+  .chip[data-papel="secundario"]{background:var(--petroleo-claro);border-color:var(--petroleo);color:var(--petroleo-fundo)}
+  .chip .marca{font-size:11px;font-weight:600;border-radius:var(--raio-p);padding:1px 7px;background:rgba(255,255,255,.22)}
+  .chip[data-papel="secundario"] .marca{background:var(--branco)}
+  .vazio{color:var(--tinta-suave);font-size:15px}
+
+  /* ficha detalhada */
+  .ficha{margin-top:18px;border-radius:var(--raio-m);background:var(--nevoa);padding:18px 20px;font-size:15px;display:none}
+  .ficha.aberta{display:block;animation:surge .35s var(--mola)}
+  .ficha h3{margin:0 0 4px;font-size:17px;font-weight:600}
+  .ficha p{margin:0 0 10px;color:var(--tinta-suave)}
+  .ficha ul{margin:0 0 8px;padding-left:18px}
+  .ficha .evitar{font-size:14px;color:var(--tinta-suave);margin:0}
+  @keyframes surge{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+  /* briefing */
+  .campos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .campo{display:flex;flex-direction:column;gap:6px}
+  .campo.largo{grid-column:1/-1}
+  .campo label{font-size:14px;font-weight:500}
+  .campo small{color:var(--tinta-suave);font-size:13px;font-weight:400}
+  .campo input,.campo textarea,.campo select{border:1px solid var(--linha);border-radius:12px;padding:11px 14px;background:var(--branco);font-size:16px;resize:vertical}
+  .campo textarea{min-height:92px;line-height:1.45}
+  .campo input:focus,.campo textarea:focus,.campo select:focus{outline:none;border-color:var(--petroleo);box-shadow:0 0 0 4px var(--petroleo-claro)}
+
+  /* painel de resumo */
+  .resumo{position:sticky;top:76px;background:var(--branco);border:1px solid var(--linha);border-radius:var(--raio-g);padding:26px 26px 22px;box-shadow:0 20px 50px -24px rgba(36,64,63,.28)}
+  .resumo h2{margin:0 0 14px;font-size:15px;font-weight:600;color:var(--petroleo)}
+  .receita{font-family:var(--serifa);font-size:25px;line-height:1.32;letter-spacing:-.01em;margin:0 0 18px;color:var(--tinta)}
+  .receita em{font-style:normal;color:var(--petroleo);border-bottom:1.5px solid color-mix(in srgb,var(--petroleo) 35%,transparent);transition:color .3s}
+  .receita .pend{color:#a8b6b5;font-style:italic}
+  .receita em.novo{animation:troca .5s var(--mola)}
+  @keyframes troca{from{opacity:0;filter:blur(4px)}to{opacity:1;filter:none}}
+  .dosagem{display:flex;height:8px;border-radius:var(--raio-p);overflow:hidden;background:var(--nevoa);margin-bottom:8px}
+  .dosagem i{display:block;height:100%;transition:flex-grow .5s var(--mola)}
+  .legenda{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--tinta-suave);margin-bottom:20px}
+  .legenda b{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0}
+  .aviso{font-size:13px;color:#8a5a00;background:#FFF6E3;border-radius:10px;padding:8px 12px;margin:0 0 14px;display:none}
+  .aviso.on{display:block}
+  pre.bloco{margin:0 0 14px;background:var(--nevoa);border-radius:var(--raio-m);padding:14px 16px;font:13px/1.55 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:0;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto;color:var(--tinta)}
+  .acoes{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{border:0;border-radius:var(--raio-p);padding:11px 20px;font-size:15px;font-weight:500;cursor:pointer;transition:background .2s,transform .15s}
+  .btn:active{transform:scale(.97)}
+  .btn.primario{background:var(--petroleo);color:var(--branco);flex:1 1 100%}
+  .btn.sec{flex:1 1 0;padding:9px 12px;font-size:14px}
+  .btn.primario:hover{background:var(--petroleo-fundo)}
+  .btn.sec{background:var(--nevoa);color:var(--petroleo-fundo)}
+  .btn.sec:hover{background:var(--petroleo-claro)}
+  .salvos{margin-top:18px;padding-top:16px;border-top:1px solid var(--linha);display:none}
+  .salvos.on{display:block}
+  .salvos h3{font-size:13px;font-weight:500;color:var(--tinta-suave);margin:0 0 8px}
+  .salvos .chips .chip{font-size:13px;padding:5px 12px}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:rgba(28,40,39,.92);color:#fff;font-size:14px;padding:11px 20px;border-radius:var(--raio-p);backdrop-filter:blur(12px);transition:opacity .3s,transform .4s var(--mola);pointer-events:none;z-index:50}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  /* como usar */
+  .como{background:var(--nevoa);padding:72px 24px}
+  .como-in{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+  .como h2{grid-column:1/-1;margin:0;font-size:34px;letter-spacing:-.03em;font-weight:600}
+  .como h3{margin:0 0 6px;font-size:19px;font-weight:600}
+  .como p{margin:0;color:var(--tinta-suave);font-size:16px}
+  .como code{font:14px ui-monospace,"SF Mono",Menlo,monospace;background:var(--branco);padding:2px 6px;border-radius:6px;letter-spacing:0}
+  footer{padding:32px 24px;text-align:center;font-size:13px;color:var(--tinta-suave)}
+  footer a{color:var(--petroleo)}
+
+  /* barra móvel */
+  .barra-movel{display:none}
+  @media (max-width:980px){
+    .config{grid-template-columns:1fr;gap:0}
+    .resumo{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:22px 22px 0 0;max-height:82vh;overflow:auto;transform:translateY(100%);transition:transform .45s var(--mola);z-index:40;padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+    .resumo.aberto{transform:none}
+    .barra-movel{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;align-items:center;gap:12px;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--linha);border-radius:var(--raio-g);padding:10px 10px 10px 18px;box-shadow:0 10px 30px -12px rgba(36,64,63,.35)}
+    .barra-movel span{flex:1;font-family:var(--serifa);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .como-in{grid-template-columns:1fr}
+    .campos{grid-template-columns:1fr}
+    .corpo,.passo .ajuda{margin-left:0}
+    .barra nav{display:none}
+    .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+    .abertura{padding-top:48px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <a href="#" aria-label="the Writer, início"><img src="assets/logo.png" alt="the Writer"></a>
+  <nav><a href="#montar">Montar perfil</a><a href="#como">Como usar</a><a href="https://github.com/Gudradee/TheWriter">GitHub</a></nav>
+</header>
+
+<section class="abertura">
+  <img class="logo-grande" src="assets/logo.png" alt="the Writer">
+  <p>Junte um autor, um veículo e um tom. O resultado é um jeito de escrever que só o seu perfil tem, em português do Brasil e sem cara de IA.</p>
+</section>
+
+<main class="config" id="montar">
+  <div class="passos">
+
+    <section class="passo" aria-labelledby="t1">
+      <h2 id="t1"><span class="n">1</span>Formato</h2>
+      <p class="ajuda">Escolha a área para carregar as regras dela e um perfil pronto. Depois ajuste o que quiser.</p>
+      <div class="corpo"><div class="modulos" id="modulos"></div></div>
+    </section>
+
+    <section class="passo" aria-labelledby="t2">
+      <h2 id="t2"><span class="n">2</span>Autores</h2>
+      <p class="ajuda">Um autor principal dá a linguagem. Até dois secundários entram com um traço pontual.</p>
+      <div class="corpo">
+        <div class="linha-ctrl">
+          <div class="seg" role="group" aria-label="Papel do autor">
+            <button type="button" data-papel-modo="principal" aria-pressed="true">Principal</button>
+            <button type="button" data-papel-modo="secundario" aria-pressed="false">Secundário</button>
+          </div>
+          <input class="busca" type="search" placeholder="Buscar autor" data-busca="autores" aria-label="Buscar autor">
+        </div>
+        <div class="linha-ctrl"><div class="seg" data-filtro="autores" role="group" aria-label="Grupos de autores"></div></div>
+        <div data-grade="autores"></div>
+        <div class="ficha" data-ficha="autores" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="passo" aria-labelledby="t3">
+      <h2 id="t3"><span class="n">3</span>Veículo</h2>
+      <p class="ajuda">A estrutura: como a ideia é montada, da primeira linha ao fecho.</p>
+      <div class="corpo">
+        <div class="linha-ctrl"><div class="seg" data-filtro="veiculos" role="group" aria-label="Grupos de veículos"></div></div>
+        <div data-grade="veiculos"></div>
+        <div class="ficha" data-ficha="veiculos" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="passo" aria-labelledby="t4">
+      <h2 id="t4"><span class="n">4</span>Tom</h2>
+      <p class="ajuda">A postura diante de quem lê. Escolha um ou dois.</p>
+      <div class="corpo">
+        <div class="linha-ctrl"><div class="seg" data-filtro="tons" role="group" aria-label="Grupos de tons"></div></div>
+        <div data-grade="tons"></div>
+        <div class="ficha" data-ficha="tons" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="passo" aria-labelledby="t5">
+      <h2 id="t5"><span class="n">5</span>Jogadas de referência</h2>
+      <p class="ajuda">Opcional. Uma técnica de um trabalho que o mundo reconhece como excelente. Até duas.</p>
+      <div class="corpo">
+        <div class="linha-ctrl"><div class="seg" data-filtro="referencias" role="group" aria-label="Grupos de referências"></div></div>
+        <div data-grade="referencias"></div>
+        <div class="ficha" data-ficha="referencias" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="passo" aria-labelledby="t6">
+      <h2 id="t6"><span class="n">6</span>Briefing</h2>
+      <p class="ajuda">Quanto mais fato concreto, menos genérico o texto. O que você deixar em branco, a skill pergunta ou marca para confirmar.</p>
+      <div class="corpo campos">
+        <div class="campo largo"><label for="b-tema">Tema</label><input id="b-tema" data-b="tema" placeholder="Ex.: por que o cartão de crédito parcelado sai mais caro"></div>
+        <div class="campo"><label for="b-publico">Público</label><input id="b-publico" data-b="publico" placeholder="Ex.: jovens de 20 a 30 anos no primeiro emprego"></div>
+        <div class="campo"><label for="b-canal">Canal</label>
+          <select id="b-canal" data-b="canal">
+            <option value="">Você decide</option><option>instagram</option><option>linkedin</option><option>tiktok (roteiro)</option><option>x/threads</option><option>newsletter</option><option>blog/site</option><option>e-mail</option><option>impresso</option>
+          </select></div>
+        <div class="campo"><label for="b-objetivo">Objetivo</label><input id="b-objetivo" data-b="objetivo" placeholder="Ex.: educar e gerar salvamentos"></div>
+        <div class="campo"><label for="b-cta">Chamada para ação</label><input id="b-cta" data-b="cta" placeholder="Ex.: salvar para consultar antes de comprar"></div>
+        <div class="campo largo"><label for="b-fatos">Fatos e provas <small>números, fontes, histórias reais, depoimentos que você tem</small></label><textarea id="b-fatos" data-b="fatos" placeholder="Ex.: juros do rotativo segundo o Banco Central em setembro; caso de um cliente (autorizado)"></textarea></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="resumo" id="resumo" aria-labelledby="t-resumo">
+    <h2 id="t-resumo">Seu perfil</h2>
+    <p class="receita" id="receita"></p>
+    <div class="dosagem" id="dosagem" aria-hidden="true"></div>
+    <div class="legenda" id="legenda"></div>
+    <p class="aviso" id="aviso"></p>
+    <pre class="bloco" id="bloco" aria-label="Comando para colar no Claude"></pre>
+    <div class="acoes">
+      <button class="btn primario" id="copiar" type="button">Copiar comando</button>
+      <button class="btn sec" id="salvar" type="button">Salvar perfil</button>
+      <button class="btn sec" id="link" type="button">Copiar link</button>
+      <button class="btn sec" id="limpar" type="button">Recomeçar</button>
+    </div>
+    <div class="salvos" id="salvos"><h3>Perfis salvos neste navegador</h3><div class="chips" id="lista-salvos"></div></div>
+  </aside>
+</main>
+
+<div class="barra-movel" id="barra-movel">
+  <span id="receita-curta">Monte seu perfil</span>
+  <button class="btn primario" id="abrir-resumo" type="button" style="flex:0">Ver perfil</button>
+</div>
+
+<section class="como" id="como">
+  <div class="como-in">
+    <h2>Como usar</h2>
+    <div><h3>Instale a skill</h3><p>No Claude Code, copie a pasta <code>skills/the-writer</code> para <code>~/.claude/skills/</code>. No Claude.ai, envie o arquivo <code>the-writer.zip</code> em Configurações, na seção de skills.</p></div>
+    <div><h3>Monte o perfil aqui</h3><p>Escolha formato, autores, veículo, tom e jogadas. Preencha o briefing com os fatos que você tem.</p></div>
+    <div><h3>Cole no Claude</h3><p>Copie o comando e cole numa conversa. A skill lê o perfil, escreve, passa a revisão anti-IA e devolve o texto com notas do que precisa confirmar.</p></div>
+  </div>
+</section>
+
+<footer>the Writer é código aberto, sob licença MIT. <a href="https://github.com/Gudradee/TheWriter">Ver no GitHub</a></footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="catalogo.js"></script>
+<script>
+(() => {
+  const C = window.CATALOGO;
+  const CAMADAS = ["autores","veiculos","tons","referencias"];
+  const LIMITES = {secundarios:2, tons:2, jogadas:2};
+  const CORES = {principal:"#375A59", secundarios:"#7FA3A1", veiculo:"#24403F", tons:"#A9C4C2", jogadas:"#D3E1E0"};
+
+  // índice por id
+  const ITEM = {};
+  CAMADAS.forEach(c => C[c].grupos.forEach(g => g.itens.forEach(i => ITEM[i.id] = {...i, camada:c, grupo:g.nome})));
+  const nome = id => (ITEM[id] ? ITEM[id].nome.replace(/\s*\(.*\)$/,"") : id);
+
+  const vazio = () => ({modulo:"", principal:"", secundarios:[], veiculo:"", tons:[], jogadas:[], briefing:{}});
+  let S = vazio();
+  let modoAutor = "principal";
+  const filtros = {autores:"todos", veiculos:"todos", tons:"todos", referencias:"todos"};
+  const buscas = {autores:""};
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+
+  // armazenamento seguro
+  const guardar = {
+    ler(){ try { return JSON.parse(localStorage.getItem("thewriter.perfis")||"[]"); } catch(e){ return []; } },
+    gravar(v){ try { localStorage.setItem("thewriter.perfis", JSON.stringify(v)); return true; } catch(e){ return false; } }
+  };
+
+  function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),2200); }
+
+  // ---------- módulos
+  function renderModulos(){
+    const box = $("#modulos"); box.innerHTML="";
+    C.modulos.forEach(m => {
+      const b = document.createElement("button");
+      b.type="button"; b.className="modulo"; b.setAttribute("aria-pressed", S.modulo===m.id);
+      const [tipo, area] = m.nome.split(" · ");
+      b.innerHTML = area ? `<strong>${area}</strong><span>${tipo}</span>` : `<strong>${m.nome.split(" (")[0]}</strong><span>Sem regras de área</span>`;
+      b.onclick = () => escolherModulo(m);
+      box.appendChild(b);
+    });
+  }
+  function escolherModulo(m){
+    if (S.modulo === m.id){ S.modulo=""; atualizar(); return; }
+    S.modulo = m.id;
+    if (m.preset){
+      Object.assign(S, JSON.parse(JSON.stringify(m.preset)));
+      toast("Perfil pronto aplicado. Ajuste o que quiser.");
+    }
+    atualizar();
+  }
+
+  // ---------- filtros e grades
+  function renderFiltros(){
+    CAMADAS.forEach(c => {
+      const seg = document.querySelector(`[data-filtro="${c}"]`); seg.innerHTML="";
+      [{id:"todos",nome:"Todos"}, ...C[c].grupos].forEach(g => {
+        const b=document.createElement("button"); b.type="button"; b.textContent=g.nome;
+        b.setAttribute("aria-pressed", filtros[c]===g.id);
+        b.onclick=()=>{ filtros[c]=g.id; renderFiltros(); renderGrade(c); };
+        seg.appendChild(b);
+      });
+    });
+  }
+  function papel(c, id){
+    if (c==="autores") return S.principal===id ? "principal" : S.secundarios.includes(id) ? "secundario" : "";
+    if (c==="veiculos") return S.veiculo===id ? "sim" : "";
+    if (c==="tons") return S.tons.includes(id) ? "sim" : "";
+    if (c==="referencias") return S.jogadas.includes(id) ? "sim" : "";
+  }
+  function renderGrade(c){
+    const box = document.querySelector(`[data-grade="${c}"]`); box.innerHTML="";
+    const termo = (buscas[c]||"").toLowerCase();
+    let total = 0;
+    C[c].grupos.forEach(g => {
+      if (filtros[c]!=="todos" && filtros[c]!==g.id) return;
+      const itens = g.itens.filter(i => !termo || (i.nome+" "+i.resumo).toLowerCase().includes(termo));
+      if (!itens.length) return;
+      total += itens.length;
+      if (filtros[c]==="todos"){ const h=document.createElement("p"); h.className="grupo-nome"; h.textContent=g.nome; box.appendChild(h); }
+      const wrap=document.createElement("div"); wrap.className="chips";
+      itens.forEach(i => {
+        const b=document.createElement("button"); b.type="button"; b.className="chip";
+        const p = papel(c, i.id); if (p) b.dataset.papel=p;
+        b.setAttribute("aria-pressed", !!p);
+        b.title = i.resumo;
+        b.innerHTML = `<span>${i.nome}</span>` + (p==="principal" ? `<span class="marca">principal</span>` : p==="secundario" ? `<span class="marca">secundário</span>` : "");
+        b.onclick = () => alternar(c, i.id);
+        wrap.appendChild(b);
+      });
+      box.appendChild(wrap);
+    });
+    if (!total) box.innerHTML = `<p class="vazio">Nada encontrado. Tente outro nome.</p>`;
+  }
+  function mostrarFicha(c, id){
+    const f = document.querySelector(`[data-ficha="${c}"]`); const i = ITEM[id];
+    f.innerHTML = `<h3>${i.nome}</h3><p>${i.resumo}</p><ul>${i.tecnicas.map(t=>`<li>${t}</li>`).join("")}</ul><p class="evitar">Evitar: ${i.evitar}</p>`;
+    f.classList.remove("aberta"); void f.offsetWidth; f.classList.add("aberta");
+  }
+  function alternar(c, id){
+    const tirar = (arr) => arr.filter(x=>x!==id);
+    if (c==="autores"){
+      if (modoAutor==="principal"){
+        if (S.principal===id){ S.principal=""; }
+        else { S.secundarios = tirar(S.secundarios); S.principal=id; }
+      } else {
+        if (S.secundarios.includes(id)) S.secundarios = tirar(S.secundarios);
+        else {
+          if (S.principal===id) S.principal="";
+          if (S.secundarios.length>=LIMITES.secundarios){ toast("Até 2 secundários. Tire um antes de escolher outro."); return; }
+          S.secundarios.push(id);
+        }
+      }
+    }
+    if (c==="veiculos") S.veiculo = S.veiculo===id ? "" : id;
+    if (c==="tons"){
+      if (S.tons.includes(id)) S.tons = tirar(S.tons);
+      else { if (S.tons.length>=LIMITES.tons){ toast("Até 2 tons. Mais que isso vira mingau."); return; } S.tons.push(id); }
+    }
+    if (c==="referencias"){
+      if (S.jogadas.includes(id)) S.jogadas = tirar(S.jogadas);
+      else { if (S.jogadas.length>=LIMITES.jogadas){ toast("Até 2 jogadas por texto."); return; } S.jogadas.push(id); }
+    }
+    mostrarFicha(c, id);
+    atualizar();
+  }
+
+  // ---------- resumo
+  let anterior = {};
+  function em(chave, valor, texto){
+    const novo = anterior[chave]!==valor ? " novo" : "";
+    return `<em class="${novo.trim()}">${texto}</em>`;
+  }
+  function lista(arr){ return arr.length<2 ? arr.join("") : arr.slice(0,-1).join(", ")+" e "+arr[arr.length-1]; }
+  function receita(){
+    const pend = t => `<span class="pend">${t}</span>`;
+    let r = "Escrever como ";
+    r += S.principal ? em("p", S.principal, nome(S.principal)) : pend("um autor");
+    if (S.secundarios.length) r += ", com um toque de " + em("s", S.secundarios.join(), lista(S.secundarios.map(nome)));
+    r += ", montado como ";
+    r += S.veiculo ? em("v", S.veiculo, nome(S.veiculo)) : pend("um veículo");
+    r += ", num tom ";
+    r += S.tons.length ? em("t", S.tons.join(), lista(S.tons.map(t=>nome(t).toLowerCase()))) : pend("à sua escolha");
+    if (S.jogadas.length) r += ", usando a jogada de " + em("j", S.jogadas.join(), lista(S.jogadas.map(j=>{ const n=ITEM[j].nome; const q=n.match(/"([^"]+)"/); return q?q[1]:n.replace(/,.*$/,""); }))) ;
+    r += ".";
+    anterior = {p:S.principal, s:S.secundarios.join(), v:S.veiculo, t:S.tons.join(), j:S.jogadas.join()};
+    return r;
+  }
+  function dosagem(){
+    const partes = [
+      ["principal", S.principal?5:0, "Autor principal"],
+      ["secundarios", S.secundarios.length*1.5, "Secundários"],
+      ["veiculo", S.veiculo?3:0, "Veículo"],
+      ["tons", S.tons.length?2.5:0, "Tom"],
+      ["jogadas", S.jogadas.length*1, "Jogadas"]
+    ];
+    $("#dosagem").innerHTML = partes.map(([k,v])=>`<i style="flex-grow:${v};background:${CORES[k]}"></i>`).join("");
+    $("#legenda").innerHTML = partes.filter(p=>p[1]).map(([k,,n])=>`<span><b style="background:${CORES[k]}"></b>${n}</span>`).join("");
+  }
+  function bloco(){
+    const b = S.briefing;
+    const linhas = [
+      "[the Writer · perfil]",
+      `modulo: ${S.modulo||"livre"}`,
+      `principal: ${S.principal}`,
+      `secundarios: ${S.secundarios.join(", ")}`,
+      `veiculo: ${S.veiculo}`,
+      `tons: ${S.tons.join(", ")}`,
+      `jogadas: ${S.jogadas.join(", ")}`,
+      `canal: ${b.canal||""}`,
+      "[briefing]",
+      `tema: ${b.tema||""}`,
+      `publico: ${b.publico||""}`,
+      `objetivo: ${b.objetivo||""}`,
+      `fatos: ${(b.fatos||"").replace(/\n+/g," / ")}`,
+      `cta: ${b.cta||""}`
+    ];
+    return linhas.join("\n");
+  }
+  function avisos(){
+    const a = [];
+    if (!S.principal) a.push("Escolha um autor principal.");
+    if (!S.veiculo) a.push("Escolha um veículo.");
+    if (!(S.briefing.fatos||"").trim() && S.principal && S.veiculo) a.push("Sem fatos no briefing, a skill vai perguntar ou marcar trechos para confirmar.");
+    const el=$("#aviso"); el.textContent=a.join(" "); el.classList.toggle("on", !!a.length);
+  }
+  function atualizar(){
+    renderModulos();
+    CAMADAS.forEach(renderGrade);
+    $("#receita").innerHTML = receita();
+    $("#receita-curta").textContent = $("#receita").textContent;
+    dosagem(); avisos();
+    $("#bloco").textContent = bloco();
+    try { history.replaceState(null, "", "#p=" + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(S)))))); } catch(e){}
+  }
+
+  // ---------- salvos
+  function renderSalvos(){
+    const v = guardar.ler(); const box=$("#lista-salvos"); box.innerHTML="";
+    $("#salvos").classList.toggle("on", v.length>0);
+    v.forEach((p, idx) => {
+      const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=p.nome;
+      b.title="Carregar este perfil. Clique com Alt para apagar.";
+      b.onclick=(e)=>{
+        if (e.altKey){ v.splice(idx,1); guardar.gravar(v); renderSalvos(); toast("Perfil apagado"); return; }
+        S = {...vazio(), ...JSON.parse(JSON.stringify(p.estado))}; preencherBriefing(); atualizar(); toast(`Perfil "${p.nome}" carregado`);
+      };
+      box.appendChild(b);
+    });
+  }
+  function preencherBriefing(){ $$("[data-b]").forEach(el => el.value = S.briefing[el.dataset.b]||""); }
+
+  async function copiar(texto, ok){
+    try { await navigator.clipboard.writeText(texto); toast(ok); }
+    catch(e){
+      const t=document.createElement("textarea"); t.value=texto; document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); toast(ok); } catch(_){ toast("Não deu para copiar. Selecione o texto e copie à mão."); }
+      t.remove();
+    }
+  }
+
+  // ---------- eventos
+  $$("[data-papel-modo]").forEach(b => b.onclick = () => {
+    modoAutor = b.dataset.papelModo;
+    $$("[data-papel-modo]").forEach(x => x.setAttribute("aria-pressed", x===b));
+  });
+  $$("[data-busca]").forEach(i => i.oninput = () => { buscas[i.dataset.busca]=i.value; renderGrade(i.dataset.busca); });
+  $$("[data-b]").forEach(el => el.oninput = el.onchange = () => { S.briefing[el.dataset.b]=el.value; avisos(); $("#bloco").textContent=bloco(); });
+  $("#copiar").onclick = () => copiar(bloco(), "Comando copiado. Cole numa conversa com o Claude.");
+  $("#link").onclick = () => copiar(location.href, "Link do perfil copiado");
+  $("#limpar").onclick = () => { S=vazio(); preencherBriefing(); $$(".ficha").forEach(f=>f.classList.remove("aberta")); atualizar(); toast("Perfil zerado"); };
+  $("#salvar").onclick = () => {
+    if (!S.principal){ toast("Escolha pelo menos o autor principal."); return; }
+    const sugestao = [nome(S.principal), S.veiculo && nome(S.veiculo)].filter(Boolean).join(" + ");
+    const n = prompt("Nome do perfil", sugestao); if (!n) return;
+    const v = guardar.ler(); v.unshift({nome:n, estado:S});
+    if (guardar.gravar(v.slice(0,20))){ renderSalvos(); toast("Perfil salvo neste navegador"); }
+    else toast("Este navegador não permite salvar. Use Copiar link.");
+  };
+  $("#abrir-resumo").onclick = () => { const r=$("#resumo"); const ab=r.classList.toggle("aberto"); $("#abrir-resumo").textContent = ab ? "Fechar" : "Ver perfil"; };
+
+  // ---------- início: lê perfil do link
+  try {
+    const m = location.hash.match(/#p=(.+)/);
+    if (m){ S = {...vazio(), ...JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))))}; }
+  } catch(e){ S = vazio(); }
+  preencherBriefing(); renderFiltros(); renderSalvos(); atualizar();
+})();
+</script>
+</body>
+</html>
