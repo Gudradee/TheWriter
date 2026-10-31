@@ -95,8 +95,16 @@ def main():
         sys.exit(1)
     gerar_md(cat)
     shutil.copyfile(FONTE, RAIZ / "docs" / "catalogo.json")
+    refs = SKILL / "references"
+    textos = {
+        "antiIA": (refs / "anti-ia.md").read_text(encoding="utf-8"),
+        "bases": {t: (refs / "modulos" / f"_base-{t}.md").read_text(encoding="utf-8") for t in ("carrossel", "materia")},
+        "modulos": {m["id"]: (refs / "modulos" / f"{m['id']}.md").read_text(encoding="utf-8")
+                    for m in cat["modulos"] if m["id"] != "livre"},
+    }
     (RAIZ / "docs" / "catalogo.js").write_text(
-        "window.CATALOGO = " + json.dumps(cat, ensure_ascii=False) + ";\n", encoding="utf-8")
+        "window.CATALOGO = " + json.dumps(cat, ensure_ascii=False) + ";\n"
+        + "window.TEXTOS = " + json.dumps(textos, ensure_ascii=False) + ";\n", encoding="utf-8")
     zipado = empacotar()
     contagem = {c: sum(len(g["itens"]) for g in cat[c]["grupos"]) for c in CAMADAS}
     print("OK", contagem, f"total={len(ids)}", f"módulos={len(cat['modulos'])}", zipado.name)

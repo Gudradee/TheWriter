@@ -37,7 +37,12 @@ Cada módulo traz perfis prontos, referências da área, estrutura, limites lega
 
 ## Como usar
 
-### 1. Instale a skill
+### Jeito mais fácil: o arquivo .md (sem instalar nada)
+1. Abra o [painel](https://gudradee.github.io/TheWriter/) e responda as perguntas: formato, linguagem (autor), estrutura (veículo), tom, jogada (opcional) e briefing.
+2. No último passo, clique em **Baixar arquivo .md**. O arquivo traz as instruções para a IA, o seu perfil com as técnicas de cada camada, as regras da área, a revisão anti-IA e o briefing.
+3. Numa conversa nova com o Claude, envie o arquivo como anexo (ou cole o texto dele) e peça: "Escreva o texto".
+
+### Para quem usa o Claude Code: a skill completa
 
 **Claude Code**
 ```bash
@@ -45,34 +50,11 @@ git clone https://github.com/Gudradee/TheWriter.git
 cp -r TheWriter/skills/the-writer ~/.claude/skills/
 ```
 
-**Claude.ai / app do Claude**
-Baixe [`dist/the-writer.zip`](dist/the-writer.zip) e envie nas configurações do Claude, na seção de skills.
+**Claude.ai / app do Claude:** baixe [`dist/the-writer.zip`](dist/the-writer.zip) e envie nas configurações do Claude, na seção de skills.
 
 **Outros agentes** (Codex, Cursor, Gemini CLI): copie a pasta `skills/the-writer` para a pasta de skills do agente.
 
-### 2. Monte o perfil
-Abra o [painel](https://gudradee.github.io/TheWriter/), escolha formato, autores, veículo, tom e jogadas, preencha o briefing e clique em **Copiar comando**.
-
-### 3. Cole no Claude
-O comando gerado tem este formato:
-```
-[the Writer · perfil]
-modulo: carrossel-financas
-principal: housel
-secundarios:
-veiculo: morning-brew
-tons: didatico, conversa-de-bar
-jogadas: two-young-men
-canal: instagram
-[briefing]
-tema: por que o parcelado no cartão sai mais caro
-publico: jovens no primeiro emprego
-objetivo: educar e gerar salvamentos
-fatos: ...
-cta: salvar para consultar antes de comprar
-```
-
-Sem o painel também funciona: peça em linguagem natural ("escreve um carrossel de advocacia no estilo do Paul Graham, tom consultivo") ou só chame a skill, e ela abre um seletor na própria conversa.
+Com a skill instalada, peça em linguagem natural ("escreve um carrossel de advocacia com a linguagem do Paul Graham, tom consultivo") ou só chame a skill, e ela abre um seletor na própria conversa.
 
 ## Estrutura do repositório
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>the Writer: monte seu perfil de escrita</title>
-<meta name="description" content="Monte um perfil de escrita (autor, veículo, tom e jogadas de referência) e gere o comando para a skill the Writer no Claude.">
+<meta name="description" content="Monte um perfil de escrita em poucos passos e baixe um arquivo .md para colar no Claude e escrever com ele.">
 <meta name="theme-color" content="#F0F1FA">
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,13 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --azul:#1A2FFB;
-    --azul-fundo:#0F1FC4;
-    --azul-claro:#DDE1FE;
-    --cinza:#F0F1FA;
-    --branco:#FFFFFF;
-    --tinta:#14151C;
-    --tinta-suave:#676A7E;
+    --azul:#1A2FFB; --azul-fundo:#0F1FC4; --azul-claro:#DDE1FE;
+    --cinza:#F0F1FA; --branco:#FFFFFF; --tinta:#14151C; --tinta-suave:#676A7E;
     --linha:rgba(20,21,28,.09);
     --raio-g:32px; --raio-m:20px; --raio-p:999px;
     --fonte:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
@@ -30,15 +25,16 @@
   button,input,textarea,select{font:inherit;color:inherit;letter-spacing:inherit}
   :focus-visible{outline:2.5px solid var(--azul);outline-offset:3px;border-radius:12px}
   ::selection{background:var(--azul);color:#fff}
+  [hidden]{display:none!important}
 
-  /* topo flutuante */
+  /* topo */
   .topo{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,3vw,40px);pointer-events:none}
   .topo > *{pointer-events:auto}
-  .topo::before{content:"";position:absolute;inset:0;background:rgba(240,241,250,.82);backdrop-filter:saturate(160%) blur(18px);-webkit-backdrop-filter:saturate(160%) blur(18px);opacity:0;transition:opacity .4s var(--mola);pointer-events:none;z-index:-1}
+  .topo::before{content:"";position:absolute;inset:0;background:rgba(240,241,250,.85);backdrop-filter:saturate(160%) blur(18px);-webkit-backdrop-filter:saturate(160%) blur(18px);opacity:0;transition:opacity .4s var(--mola);pointer-events:none;z-index:-1}
   .topo.rolado::before{opacity:1}
   .topo .marca img{height:26px;display:block}
   .topo .acoes-topo{display:flex;gap:8px}
-  .pilula{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:var(--raio-p);padding:12px 20px;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;background:var(--branco);color:var(--tinta);transition:background .35s var(--mola),color .35s var(--mola),transform .2s}
+  .pilula{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:var(--raio-p);padding:12px 20px;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;background:var(--branco);color:var(--tinta);transition:background .35s var(--mola),color .35s var(--mola),transform .2s,opacity .3s}
   .pilula .ponto{width:7px;height:7px;border-radius:50%;background:var(--azul);transition:transform .45s var(--mola)}
   .pilula:hover .ponto{transform:scale(1.8)}
   .pilula:active{transform:scale(.97)}
@@ -48,72 +44,92 @@
   .pilula.azul{background:var(--azul);color:#fff}
   .pilula.azul .ponto{background:#fff}
   .pilula.azul:hover{background:var(--azul-fundo)}
+  .pilula.fantasma{background:transparent;color:var(--tinta-suave)}
+  .pilula.fantasma:hover{background:var(--cinza);color:var(--tinta)}
+  .pilula[disabled]{opacity:.35;cursor:not-allowed}
 
-  /* herói com tinta */
+  /* herói */
   .heroi{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px clamp(18px,3vw,40px) 40px;overflow:hidden}
   #caneta{position:absolute;inset:0;width:100%;height:100%;display:block;filter:blur(5px);opacity:.9}
-  @media (max-width:700px){#caneta{filter:blur(3.5px)}}
   .heroi h1{position:relative;margin:0;font-size:clamp(44px,7vw,128px);line-height:.94;letter-spacing:-.055em;font-weight:500;font-stretch:88%}
   .heroi h1 .l{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
   .heroi h1 .l > span{display:block;transform:translateY(105%);animation:sobe 1.1s var(--mola) forwards}
   .heroi h1 .l:nth-child(2) > span{animation-delay:.08s}
-  .heroi h1 .l:nth-child(3) > span{animation-delay:.16s}
   @keyframes sobe{to{transform:none}}
   .heroi-pe{position:relative;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:40px;flex-wrap:wrap}
-  .heroi-pe p{margin:0;max-width:430px;font-size:19px;line-height:1.4;color:var(--tinta-suave)}
+  .heroi-pe p{margin:0;max-width:440px;font-size:19px;line-height:1.4;color:var(--tinta-suave)}
   .rolar{font-size:14px;color:var(--tinta-suave);display:flex;align-items:center;gap:10px}
   .rolar i{display:block;width:1.5px;height:34px;background:var(--linha);position:relative;overflow:hidden}
   .rolar i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--azul);animation:desce 1.8s var(--mola) infinite}
   @keyframes desce{to{top:100%}}
 
-  /* configurador */
-  .config{max-width:1400px;margin:0 auto;padding:40px clamp(12px,2vw,24px) 120px;display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:16px;align-items:start}
-  .passo{background:var(--branco);border-radius:var(--raio-g);padding:clamp(24px,3vw,44px);margin-bottom:16px}
-  .passo-cab{display:grid;grid-template-columns:72px 1fr;gap:0 16px;margin-bottom:26px}
-  .passo .n{font-size:15px;font-weight:500;color:var(--azul);font-variant-numeric:tabular-nums;padding-top:12px}
-  .passo h2{margin:0;font-size:clamp(32px,3.6vw,52px);line-height:1;letter-spacing:-.045em;font-weight:500;font-stretch:90%}
-  .passo .ajuda{grid-column:2;margin:12px 0 0;color:var(--tinta-suave);font-size:16px;max-width:56ch}
-  .corpo{margin-left:88px}
+  /* como funciona (3 camadas) */
+  .camadas{max-width:1400px;margin:0 auto;padding:40px clamp(12px,2vw,24px) 8px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .camada{background:var(--branco);border-radius:var(--raio-m);padding:22px 22px 20px}
+  .camada b{display:block;font-size:13px;font-weight:500;color:var(--azul);margin-bottom:10px}
+  .camada strong{display:block;font-size:22px;font-weight:500;letter-spacing:-.03em;margin-bottom:6px}
+  .camada span{font-size:15px;color:var(--tinta-suave)}
 
-  /* controle segmentado */
+  /* assistente */
+  .assistente{max-width:1400px;margin:0 auto;padding:12px clamp(12px,2vw,24px) 120px;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:12px;align-items:start;scroll-margin-top:84px}
+  .trilha{grid-column:1/-1;position:sticky;top:78px;z-index:20;box-shadow:0 8px 24px -16px rgba(20,21,28,.25);display:flex;gap:4px;background:var(--branco);border-radius:var(--raio-p);padding:6px;overflow-x:auto;scrollbar-width:none}
+  .trilha::-webkit-scrollbar{display:none}
+  .trilha button{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;border:0;background:transparent;border-radius:var(--raio-p);padding:10px 14px;font-size:14px;color:var(--tinta-suave);cursor:pointer;white-space:nowrap;transition:background .35s var(--mola),color .35s}
+  .trilha button i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:var(--cinza);color:var(--tinta-suave);transition:background .35s,color .35s}
+  .trilha button.feito i{background:var(--azul-claro);color:var(--azul)}
+  .trilha button[aria-current="step"]{background:var(--tinta);color:#fff}
+  .trilha button[aria-current="step"] i{background:var(--azul);color:#fff}
+  .trilha button:hover:not([aria-current="step"]){background:var(--cinza);color:var(--tinta)}
+
+  .etapa{background:var(--branco);border-radius:var(--raio-g);padding:clamp(24px,3.4vw,52px);min-height:560px;display:flex;flex-direction:column}
+  .etapa-cab{margin-bottom:28px}
+  .etapa-cab .n{display:block;font-size:14px;color:var(--azul);margin-bottom:14px}
+  .etapa h2{margin:0;font-size:clamp(32px,4vw,58px);line-height:1;letter-spacing:-.045em;font-weight:500;font-stretch:90%;max-width:16ch}
+  .etapa-cab p{margin:16px 0 0;color:var(--tinta-suave);font-size:17px;max-width:58ch}
+  .etapa-corpo{flex:1}
+  .entra{animation:entra .55s var(--mola)}
+  @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
   .seg{display:inline-flex;background:var(--cinza);border-radius:var(--raio-p);padding:4px;gap:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
   .seg::-webkit-scrollbar{display:none}
   .seg button{border:0;background:transparent;padding:8px 16px;border-radius:var(--raio-p);font-size:14px;white-space:nowrap;cursor:pointer;color:var(--tinta-suave);transition:background .3s var(--mola),color .3s}
   .seg button:hover{color:var(--tinta)}
   .seg button[aria-pressed="true"]{background:var(--tinta);color:#fff}
-  .linha-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
-  .busca{flex:1 1 200px;min-width:0;border:0;background:var(--cinza);border-radius:var(--raio-p);padding:11px 18px;font-size:15px}
+  .controles{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .busca{flex:1 1 220px;min-width:0;border:0;background:var(--cinza);border-radius:var(--raio-p);padding:11px 18px;font-size:15px}
   .busca:focus{outline:2px solid var(--azul)}
+  .dica-modo{font-size:14px;color:var(--tinta-suave);margin:-4px 0 14px}
 
-  /* módulos */
-  .modulos{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
-  .modulo{position:relative;text-align:left;border:0;background:var(--cinza);border-radius:var(--raio-m);padding:20px 20px 18px;min-height:112px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;transition:background .35s var(--mola),color .35s var(--mola)}
-  .modulo strong{display:block;font-size:22px;font-weight:500;letter-spacing:-.03em}
-  .modulo span{font-size:13px;color:var(--tinta-suave);transition:color .35s}
-  .modulo:hover{background:var(--azul-claro)}
-  .modulo[aria-pressed="true"]{background:var(--azul);color:#fff}
-  .modulo[aria-pressed="true"] span{color:rgba(255,255,255,.75)}
+  /* cartões de opção */
+  .opcoes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;max-height:520px;overflow:auto;padding:2px;margin:0 -2px;scrollbar-width:thin}
+  .opcoes.formatos{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));max-height:none}
+  .grupo-nome{grid-column:1/-1;font-size:13px;color:var(--tinta-suave);margin:14px 0 2px}
+  .grupo-nome:first-child{margin-top:0}
+  .opcao{position:relative;text-align:left;border:0;background:var(--cinza);border-radius:18px;padding:16px 16px 15px;cursor:pointer;display:flex;flex-direction:column;gap:5px;transition:background .3s var(--mola),color .3s var(--mola),transform .15s}
+  .opcao strong{font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.2;padding-right:22px}
+  .opcao span{font-size:13.5px;line-height:1.38;color:var(--tinta-suave);transition:color .3s}
+  .opcao:hover{background:var(--azul-claro)}
+  .opcao:active{transform:scale(.98)}
+  .opcao[aria-pressed="true"]{background:var(--azul);color:#fff}
+  .opcao[aria-pressed="true"] span{color:rgba(255,255,255,.78)}
+  .opcao.toque{background:var(--tinta);color:#fff}
+  .opcao.toque span{color:rgba(255,255,255,.7)}
+  .opcao .selo{position:absolute;top:12px;right:12px;font-size:11px;font-weight:600;border-radius:var(--raio-p);padding:2px 8px;background:rgba(255,255,255,.22)}
+  .opcao.grande{min-height:118px;justify-content:space-between;padding:20px}
+  .opcao.grande strong{font-size:22px;font-weight:500;letter-spacing:-.03em}
+  .vazio{grid-column:1/-1;color:var(--tinta-suave);font-size:15px}
 
-  /* chips */
-  .grupo-nome{font-size:13px;color:var(--tinta-suave);margin:22px 0 10px}
-  .grupo-nome:first-child{margin-top:4px}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chip{border:0;background:var(--cinza);border-radius:var(--raio-p);padding:10px 16px;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .3s var(--mola),color .3s var(--mola),transform .15s}
-  .chip:hover{background:var(--azul-claro)}
-  .chip:active{transform:scale(.96)}
-  .chip[data-papel="principal"],.chip[data-papel="sim"]{background:var(--azul);color:#fff}
-  .chip[data-papel="secundario"]{background:var(--tinta);color:#fff}
-  .chip .marca{font-size:11px;font-weight:600;border-radius:var(--raio-p);padding:2px 8px;background:rgba(255,255,255,.2)}
-  .vazio{color:var(--tinta-suave);font-size:15px}
-
-  /* ficha */
-  .ficha{margin-top:18px;border-radius:var(--raio-m);background:var(--cinza);padding:20px 22px;font-size:15px;display:none;border-left:3px solid var(--azul)}
-  .ficha.aberta{display:block;animation:surge .5s var(--mola)}
-  .ficha h3{margin:0 0 4px;font-size:18px;font-weight:600;letter-spacing:-.02em}
-  .ficha p{margin:0 0 10px;color:var(--tinta-suave)}
-  .ficha ul{margin:0 0 8px;padding-left:18px}
-  .ficha .evitar{font-size:14px;margin:0;color:var(--tinta-suave)}
-  @keyframes surge{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* explicação da escolha */
+  .detalhe{border-radius:var(--raio-m);background:var(--cinza);padding:20px 22px;font-size:15px;border-left:3px solid var(--azul)}
+  .detalhe h3{margin:0 0 2px;font-size:13px;font-weight:500;color:var(--azul)}
+  .detalhe h4{margin:0 0 6px;font-size:19px;font-weight:600;letter-spacing:-.02em}
+  .detalhe p{margin:0 0 10px;color:var(--tinta-suave)}
+  .detalhe ul{margin:0 0 8px;padding-left:18px}
+  .detalhe .evitar{font-size:14px;margin:0;color:var(--tinta-suave)}
+  .sugestao{margin-top:16px;border-radius:var(--raio-m);background:var(--azul-claro);padding:22px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+  .sugestao p{margin:0;font-size:16px;max-width:52ch}
+  .sugestao p b{font-weight:600}
+  .sugestao .botoes{display:flex;gap:8px;flex-wrap:wrap}
 
   /* briefing */
   .campos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -122,84 +138,106 @@
   .campo label{font-size:14px;font-weight:500}
   .campo small{color:var(--tinta-suave);font-size:13px;font-weight:400}
   .campo input,.campo textarea,.campo select{border:0;border-radius:16px;padding:13px 16px;background:var(--cinza);font-size:16px;resize:vertical;transition:box-shadow .3s}
-  .campo textarea{min-height:100px;line-height:1.45}
+  .campo textarea{min-height:110px;line-height:1.45}
   .campo input:focus,.campo textarea:focus,.campo select:focus{outline:none;box-shadow:0 0 0 2px var(--azul)}
 
-  /* resumo azul */
-  .resumo{position:sticky;top:84px;background:var(--azul);color:#fff;border-radius:var(--raio-g);padding:32px 30px 26px;overflow:hidden}
-  .resumo h2{margin:0 0 18px;font-size:14px;font-weight:500;color:rgba(255,255,255,.7)}
-  .receita{font-size:31px;line-height:1.08;letter-spacing:-.04em;font-weight:500;font-stretch:92%;margin:0 0 24px}
-  .receita em{font-style:normal;background:rgba(255,255,255,.16);border-radius:10px;padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
-  .receita .pend{color:rgba(255,255,255,.45)}
-  .receita em.novo{animation:troca .7s var(--mola)}
+  /* navegação da etapa */
+  .nav-etapa{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:28px;padding-top:22px;border-top:1px solid var(--linha)}
+  .nav-etapa .dir{display:flex;gap:8px;align-items:center}
+  .nav-etapa .falta{font-size:14px;color:var(--tinta-suave)}
+
+  /* etapa final */
+  .pronto-nome{display:flex;flex-direction:column;gap:7px;margin-bottom:22px;max-width:520px}
+  .pronto-nome label{font-size:14px;font-weight:500}
+  .pronto-nome input{border:0;border-radius:16px;padding:14px 16px;background:var(--cinza);font-size:18px}
+  .pronto-nome input:focus{outline:none;box-shadow:0 0 0 2px var(--azul)}
+  .baixar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+  .baixar .pilula.azul{padding:16px 26px;font-size:17px}
+  .baixar .pilula:not(.azul){background:var(--cinza)}
+  .baixar .pilula:not(.azul):hover{background:var(--azul-claro)}
+  .usar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+  .usar div{background:var(--cinza);border-radius:var(--raio-m);padding:18px}
+  .usar b{display:block;font-size:13px;color:var(--azul);font-weight:500;margin-bottom:8px}
+  .usar strong{display:block;font-size:17px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+  .usar span{font-size:14px;color:var(--tinta-suave)}
+  details.previa{border-radius:var(--raio-m);background:var(--cinza);padding:4px 18px}
+  details.previa summary{cursor:pointer;padding:14px 0;font-size:15px;font-weight:500}
+  details.previa pre{margin:0 0 16px;max-height:420px;overflow:auto;font:12.5px/1.6 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:0;white-space:pre-wrap;word-break:break-word}
+  .avancado{font-size:14px;color:var(--tinta-suave);margin:16px 0 0}
+  .avancado a{color:var(--azul)}
+
+  /* receita lateral */
+  .receita{position:sticky;top:146px;background:var(--azul);color:#fff;border-radius:var(--raio-g);padding:30px 28px 26px}
+  .receita h2{margin:0 0 14px;font-size:14px;font-weight:500;color:rgba(255,255,255,.72)}
+  .frase{font-size:27px;line-height:1.1;letter-spacing:-.04em;font-weight:500;font-stretch:92%;margin:0 0 22px}
+  .frase em{font-style:normal;background:rgba(255,255,255,.16);border-radius:9px;padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .frase .pend{color:rgba(255,255,255,.45)}
+  .frase em.novo{animation:troca .7s var(--mola)}
   @keyframes troca{from{background:rgba(255,255,255,.55)}to{background:rgba(255,255,255,.16)}}
-  .dosagem{display:flex;height:6px;border-radius:var(--raio-p);overflow:hidden;background:rgba(255,255,255,.15);margin-bottom:10px;gap:2px}
-  .dosagem i{display:block;height:100%;border-radius:var(--raio-p);transition:flex-grow .6s var(--mola)}
-  .legenda{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:rgba(255,255,255,.75);margin-bottom:20px}
-  .legenda b{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
-  .aviso{font-size:13px;color:#fff;background:rgba(0,0,0,.18);border-radius:12px;padding:9px 13px;margin:0 0 14px;display:none}
-  .aviso.on{display:block}
-  pre.bloco{margin:0 0 14px;background:rgba(5,10,80,.32);border-radius:var(--raio-m);padding:16px 18px;font:12.5px/1.6 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:0;white-space:pre-wrap;word-break:break-word;max-height:230px;overflow:auto;color:#fff}
-  .acoes{display:flex;flex-wrap:wrap;gap:6px}
-  .acoes .pilula{flex:1 1 0;justify-content:center;padding:11px 12px;font-size:14px;background:rgba(255,255,255,.14);color:#fff}
-  .acoes .pilula:hover{background:rgba(255,255,255,.26)}
-  .acoes .pilula.primeiro{flex:1 1 100%;background:#fff;color:var(--azul);padding:15px 20px;font-size:16px}
-  .acoes .pilula.primeiro .ponto{background:var(--azul)}
-  .acoes .pilula.primeiro:hover{background:var(--tinta);color:#fff}
-  .acoes .pilula.primeiro:hover .ponto{background:#fff}
-  .salvos{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.18);display:none}
-  .salvos.on{display:block}
-  .salvos h3{font-size:13px;font-weight:500;color:rgba(255,255,255,.7);margin:0 0 10px}
-  .salvos .chip{font-size:13px;padding:6px 13px;background:rgba(255,255,255,.14);color:#fff}
-  .salvos .chip:hover{background:rgba(255,255,255,.26)}
+  .linhas{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.2)}
+  .linhas li button{width:100%;display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:baseline;text-align:left;border:0;background:transparent;color:#fff;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.2);cursor:pointer;border-radius:0}
+  .linhas li button:hover .v{text-decoration:underline;text-underline-offset:3px}
+  .linhas .r{font-size:13px;color:rgba(255,255,255,.65)}
+  .linhas .v{font-size:15px;font-weight:500}
+  .linhas .v.pend{color:rgba(255,255,255,.45);font-weight:400}
+  .receita .acao{margin-top:20px;width:100%;background:#fff;color:var(--azul)}
+  .receita .acao .ponto{background:var(--azul)}
+  .receita .acao:hover{background:var(--tinta);color:#fff}
+  .receita .acao:hover .ponto{background:#fff}
+  .salvos{margin-top:18px}
+  .salvos h3{font-size:13px;font-weight:500;color:rgba(255,255,255,.7);margin:0 0 8px}
+  .salvos div{display:flex;flex-wrap:wrap;gap:6px}
+  .salvos button{border:0;border-radius:var(--raio-p);padding:6px 13px;font-size:13px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer}
+  .salvos button:hover{background:rgba(255,255,255,.26)}
 
-  /* toast */
-  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,24px);opacity:0;background:var(--tinta);color:#fff;font-size:14px;padding:12px 20px;border-radius:var(--raio-p);transition:opacity .35s,transform .55s var(--mola);pointer-events:none;z-index:60}
+  /* toast e cursor */
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,24px);opacity:0;background:var(--tinta);color:#fff;font-size:14px;padding:12px 20px;border-radius:var(--raio-p);transition:opacity .35s,transform .55s var(--mola);pointer-events:none;z-index:60;max-width:90vw;text-align:center}
   .toast.on{opacity:1;transform:translate(-50%,0)}
-
-  /* rodapé azul */
-  .final{background:var(--azul);color:#fff;border-radius:var(--raio-g) var(--raio-g) 0 0;margin:0 clamp(12px,2vw,24px);padding:clamp(48px,7vw,110px) clamp(24px,4vw,64px) 40px}
-  .final h2{margin:0 0 clamp(40px,6vw,90px);font-size:clamp(48px,9vw,160px);line-height:.9;letter-spacing:-.06em;font-weight:500;font-stretch:85%}
-  .como{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;border-top:1px solid rgba(255,255,255,.22);padding-top:32px}
-  .como .n{font-size:14px;color:rgba(255,255,255,.65);display:block;margin-bottom:12px}
-  .como h3{margin:0 0 8px;font-size:22px;font-weight:500;letter-spacing:-.03em}
-  .como p{margin:0;color:rgba(255,255,255,.8);font-size:16px}
-  .como code{font:13.5px ui-monospace,"SF Mono",Menlo,monospace;background:rgba(255,255,255,.14);padding:2px 7px;border-radius:7px;letter-spacing:0}
-  .rodape{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:72px;font-size:14px;color:rgba(255,255,255,.7)}
-  .rodape a{color:#fff}
-
-  /* cursor */
   .cursor{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--azul);pointer-events:none;z-index:70;transition:width .35s var(--mola),height .35s var(--mola),margin .35s var(--mola),background .3s;mix-blend-mode:multiply;display:none}
   .cursor.grande{width:46px;height:46px;margin:-23px 0 0 -23px;background:rgba(26,47,251,.18)}
   @media (hover:hover) and (pointer:fine){.cursor{display:block}}
 
-  /* barra móvel */
+  /* rodapé */
+  .final{background:var(--azul);color:#fff;border-radius:var(--raio-g) var(--raio-g) 0 0;margin:0 clamp(12px,2vw,24px);padding:clamp(48px,7vw,110px) clamp(24px,4vw,64px) 40px}
+  .final h2{margin:0 0 clamp(32px,5vw,72px);font-size:clamp(48px,9vw,160px);line-height:.9;letter-spacing:-.06em;font-weight:500;font-stretch:85%}
+  .final p{max-width:60ch;font-size:18px;color:rgba(255,255,255,.85);margin:0}
+  .final code{font:14px ui-monospace,"SF Mono",Menlo,monospace;background:rgba(255,255,255,.14);padding:2px 7px;border-radius:7px;letter-spacing:0}
+  .rodape{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:64px;padding-top:24px;border-top:1px solid rgba(255,255,255,.22);font-size:14px;color:rgba(255,255,255,.7)}
+  .rodape a{color:#fff}
+
+  /* móvel */
   .barra-movel{display:none}
-  @media (max-width:1040px){
-    .config{grid-template-columns:1fr}
-    .resumo{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:28px 28px 0 0;max-height:84vh;overflow:auto;transform:translateY(102%);transition:transform .6s var(--mola);z-index:45;padding-bottom:calc(26px + env(safe-area-inset-bottom))}
-    .resumo.aberto{transform:none}
-    .barra-movel{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;align-items:center;gap:12px;background:var(--azul);color:#fff;border-radius:var(--raio-p);padding:8px 8px 8px 22px}
-    .barra-movel span{flex:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (max-width:1100px){
+    .assistente{grid-template-columns:minmax(0,1fr)}
+    .etapa,.trilha{min-width:0}
+    .receita{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:28px 28px 0 0;max-height:82vh;overflow:auto;transform:translateY(102%);transition:transform .6s var(--mola);z-index:45;padding-bottom:calc(26px + env(safe-area-inset-bottom))}
+    .receita.aberta{transform:none}
+    .barra-movel{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;align-items:center;gap:12px;background:var(--azul);color:#fff;border-radius:var(--raio-p);padding:8px 8px 8px 22px;transform:translateY(160%);transition:transform .5s var(--mola)}
+    .barra-movel.on{transform:none}
+    .barra-movel span{flex:1;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .barra-movel .pilula{padding:10px 16px;font-size:14px;color:var(--azul)}
     .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
-    .como{grid-template-columns:1fr}
+    .camadas{grid-template-columns:1fr 1fr}
+    .usar{grid-template-columns:1fr}
   }
   @media (max-width:700px){
+    #caneta{filter:blur(3.5px)}
     .campos{grid-template-columns:1fr}
-    .corpo{margin-left:0}
-    .passo-cab{grid-template-columns:1fr}
-    .passo .ajuda{grid-column:1}
-    .passo .n{padding:0 0 8px}
+    .camadas{grid-template-columns:1fr}
+    .etapa{min-height:0}
+    .opcoes{max-height:none;grid-template-columns:1fr}
+    .opcoes.formatos{grid-template-columns:1fr 1fr}
+    .nav-etapa{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom));background:var(--branco);margin:20px -24px -24px;padding:14px 24px;border-radius:0 0 var(--raio-g) var(--raio-g)}
+    .nav-etapa .falta{display:none}
     .topo .acoes-topo .pilula:not(.escura){display:none}
   }
   @media (hover:none){
-    .acoes .pilula.primeiro:hover{background:#fff;color:var(--azul)}
-    .acoes .pilula.primeiro:hover .ponto{background:var(--azul)}
+    .opcao:hover{background:var(--cinza)}
+    .opcao[aria-pressed="true"]:hover{background:var(--azul)}
+    .opcao.toque:hover{background:var(--tinta)}
     .pilula.escura:hover{background:var(--tinta)}
-    .chip:hover,.modulo:hover{background:var(--cinza)}
-    .chip[data-papel]:hover,.modulo[aria-pressed="true"]:hover{background:var(--azul)}
-    .chip[data-papel="secundario"]:hover{background:var(--tinta)}
+    .receita .acao:hover{background:#fff;color:var(--azul)}
+    .receita .acao:hover .ponto{background:var(--azul)}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}
@@ -222,107 +260,38 @@
   <canvas id="caneta" aria-hidden="true"></canvas>
   <h1><span class="l"><span>Técnicas dos grandes.</span></span><span class="l"><span>Um estilo só seu.</span></span></h1>
   <div class="heroi-pe">
-    <p>Combine um autor, um veículo e um tom. A skill usa a técnica de cada um para montar um jeito de escrever que não existia antes, em português do Brasil e sem cara de IA.</p>
+    <p>Responda algumas perguntas, veja seu perfil de escrita se formar e baixe um arquivo para colar no Claude. Em português do Brasil e sem cara de IA.</p>
     <span class="rolar"><i></i>Role para montar</span>
   </div>
 </section>
 
-<main class="config" id="montar">
-  <div class="passos">
+<section class="camadas" aria-label="Como um perfil é formado">
+  <div class="camada"><b>Linguagem</b><strong>Um autor</strong><span>Dá o vocabulário, o ritmo e o jeito de pensar.</span></div>
+  <div class="camada"><b>Estrutura</b><strong>Um veículo</strong><span>Define como o texto abre, se organiza e fecha.</span></div>
+  <div class="camada"><b>Tom</b><strong>Uma postura</strong><span>A relação com quem lê: didática, irônica, séria…</span></div>
+  <div class="camada"><b>Resultado</b><strong>Um arquivo .md</strong><span>Com tudo isso e as regras da área, pronto para colar.</span></div>
+</section>
 
-    <section class="passo" aria-labelledby="t1">
-      <div class="passo-cab"><span class="n">01</span><h2 id="t1">Formato</h2><p class="ajuda">Escolha a área para carregar as regras dela e um perfil pronto. Depois ajuste o que quiser.</p></div>
-      <div class="corpo"><div class="modulos" id="modulos"></div></div>
-    </section>
-
-    <section class="passo" aria-labelledby="t2">
-      <div class="passo-cab"><span class="n">02</span><h2 id="t2">Autores</h2><p class="ajuda">Um autor principal dá a linguagem. Até dois secundários entram com um traço pontual.</p></div>
-      <div class="corpo">
-        <div class="linha-ctrl">
-          <div class="seg" role="group" aria-label="Papel do autor">
-            <button type="button" data-papel-modo="principal" aria-pressed="true">Principal</button>
-            <button type="button" data-papel-modo="secundario" aria-pressed="false">Secundário</button>
-          </div>
-          <input class="busca" type="search" placeholder="Buscar autor" data-busca="autores" aria-label="Buscar autor">
-        </div>
-        <div class="linha-ctrl"><div class="seg" data-filtro="autores" role="group" aria-label="Grupos de autores"></div></div>
-        <div data-grade="autores"></div>
-        <div class="ficha" data-ficha="autores" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section class="passo" aria-labelledby="t3">
-      <div class="passo-cab"><span class="n">03</span><h2 id="t3">Veículo</h2><p class="ajuda">A estrutura: como a ideia é montada, da primeira linha ao fecho.</p></div>
-      <div class="corpo">
-        <div class="linha-ctrl"><div class="seg" data-filtro="veiculos" role="group" aria-label="Grupos de veículos"></div></div>
-        <div data-grade="veiculos"></div>
-        <div class="ficha" data-ficha="veiculos" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section class="passo" aria-labelledby="t4">
-      <div class="passo-cab"><span class="n">04</span><h2 id="t4">Tom</h2><p class="ajuda">A postura diante de quem lê. Escolha um ou dois.</p></div>
-      <div class="corpo">
-        <div class="linha-ctrl"><div class="seg" data-filtro="tons" role="group" aria-label="Grupos de tons"></div></div>
-        <div data-grade="tons"></div>
-        <div class="ficha" data-ficha="tons" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section class="passo" aria-labelledby="t5">
-      <div class="passo-cab"><span class="n">05</span><h2 id="t5">Jogadas</h2><p class="ajuda">Opcional. Uma técnica de um trabalho que o mundo reconhece como excelente. Até duas.</p></div>
-      <div class="corpo">
-        <div class="linha-ctrl"><div class="seg" data-filtro="referencias" role="group" aria-label="Grupos de referências"></div></div>
-        <div data-grade="referencias"></div>
-        <div class="ficha" data-ficha="referencias" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section class="passo" aria-labelledby="t6">
-      <div class="passo-cab"><span class="n">06</span><h2 id="t6">Briefing</h2><p class="ajuda">Quanto mais fato concreto, menos genérico o texto. O que ficar em branco, a skill pergunta ou marca para confirmar.</p></div>
-      <div class="corpo campos">
-        <div class="campo largo"><label for="b-tema">Tema</label><input id="b-tema" data-b="tema" placeholder="Ex.: por que o cartão de crédito parcelado sai mais caro"></div>
-        <div class="campo"><label for="b-publico">Público</label><input id="b-publico" data-b="publico" placeholder="Ex.: jovens de 20 a 30 anos no primeiro emprego"></div>
-        <div class="campo"><label for="b-canal">Canal</label>
-          <select id="b-canal" data-b="canal">
-            <option value="">Você decide</option><option>instagram</option><option>linkedin</option><option>tiktok (roteiro)</option><option>x/threads</option><option>newsletter</option><option>blog/site</option><option>e-mail</option><option>impresso</option>
-          </select></div>
-        <div class="campo"><label for="b-objetivo">Objetivo</label><input id="b-objetivo" data-b="objetivo" placeholder="Ex.: educar e gerar salvamentos"></div>
-        <div class="campo"><label for="b-cta">Chamada para ação</label><input id="b-cta" data-b="cta" placeholder="Ex.: salvar para consultar antes de comprar"></div>
-        <div class="campo largo"><label for="b-fatos">Fatos e provas <small>números, fontes, histórias reais, depoimentos que você tem</small></label><textarea id="b-fatos" data-b="fatos" placeholder="Ex.: juros do rotativo segundo o Banco Central em setembro; caso de um cliente (autorizado)"></textarea></div>
-      </div>
-    </section>
-  </div>
-
-  <aside class="resumo" id="resumo" aria-labelledby="t-resumo">
-    <h2 id="t-resumo">Seu perfil</h2>
-    <p class="receita" id="receita"></p>
-    <div class="dosagem" id="dosagem" aria-hidden="true"></div>
-    <div class="legenda" id="legenda"></div>
-    <p class="aviso" id="aviso"></p>
-    <pre class="bloco" id="bloco" aria-label="Comando para colar no Claude"></pre>
-    <div class="acoes">
-      <button class="pilula primeiro" id="copiar" type="button"><span class="ponto"></span>Copiar comando</button>
-      <button class="pilula" id="salvar" type="button">Salvar</button>
-      <button class="pilula" id="link" type="button">Copiar link</button>
-      <button class="pilula" id="limpar" type="button">Recomeçar</button>
-    </div>
-    <div class="salvos" id="salvos"><h3>Perfis salvos neste navegador</h3><div class="chips" id="lista-salvos"></div></div>
+<main class="assistente" id="montar">
+  <nav class="trilha" id="trilha" aria-label="Etapas"></nav>
+  <section class="etapa" id="etapa" aria-live="polite"></section>
+  <aside class="receita" id="receita" aria-labelledby="t-receita">
+    <h2 id="t-receita">Sua receita</h2>
+    <p class="frase" id="frase"></p>
+    <ul class="linhas" id="linhas"></ul>
+    <button class="pilula acao" id="ir-pronto" type="button"><span class="ponto"></span>Gerar arquivo .md</button>
+    <div class="salvos" id="salvos" hidden><h3>Perfis salvos neste navegador</h3><div id="lista-salvos"></div></div>
   </aside>
 </main>
 
 <div class="barra-movel" id="barra-movel">
-  <span id="receita-curta">Monte seu perfil</span>
-  <button class="pilula" id="abrir-resumo" type="button"><span class="ponto"></span>Ver perfil</button>
+  <span id="resumo-movel">Passo 1 de 7</span>
+  <button class="pilula" id="abrir-receita" type="button"><span class="ponto"></span>Ver receita</button>
 </div>
 
 <section class="final" id="como">
   <h2>Seu texto.<br>Sua voz.</h2>
-  <div class="como">
-    <div><span class="n">01</span><h3>Instale a skill</h3><p>No Claude Code, copie a pasta <code>skills/the-writer</code> para <code>~/.claude/skills/</code>. No Claude.ai, envie o arquivo <code>the-writer.zip</code> nas configurações de skills.</p></div>
-    <div><span class="n">02</span><h3>Monte o perfil aqui</h3><p>Escolha formato, autores, veículo, tom e jogadas. Preencha o briefing com os fatos que você tem.</p></div>
-    <div><span class="n">03</span><h3>Cole no Claude</h3><p>A skill lê o perfil, escreve, passa a revisão anti-IA e devolve o texto com notas do que precisa confirmar.</p></div>
-  </div>
+  <p>O arquivo .md funciona em qualquer conversa com o Claude, sem instalar nada. Quem usa o Claude Code ou quer o fluxo completo pode instalar a skill: copie a pasta <code>skills/the-writer</code> do repositório para <code>~/.claude/skills/</code>, ou envie <code>the-writer.zip</code> nas configurações de skills do Claude.</p>
   <div class="rodape"><span>the Writer é código aberto, sob licença MIT.</span><a href="https://github.com/Gudradee/TheWriter">Ver no GitHub</a></div>
 </section>
 
@@ -424,225 +393,374 @@
   addEventListener("pointerover", e => c.classList.toggle("grande", !!e.target.closest("button,a,input,select,textarea")));
 })();
 
-/* ---------- configurador ---------- */
+
+/* ---------- assistente ---------- */
 (() => {
-  const C = window.CATALOGO;
-  const CAMADAS = ["autores","veiculos","tons","referencias"];
-  const LIMITES = {secundarios:2, tons:2, jogadas:2};
-  const CORES = {principal:"#FFFFFF", secundarios:"rgba(255,255,255,.7)", veiculo:"#14151C", tons:"rgba(255,255,255,.45)", jogadas:"rgba(255,255,255,.28)"};
-
+  const C = window.CATALOGO, T = window.TEXTOS;
   const ITEM = {};
-  CAMADAS.forEach(c => C[c].grupos.forEach(g => g.itens.forEach(i => ITEM[i.id] = {...i, camada:c, grupo:g.nome})));
+  ["autores","veiculos","tons","referencias"].forEach(c => C[c].grupos.forEach(g => g.itens.forEach(i => ITEM[i.id] = {...i, camada:c})));
+  const MOD = Object.fromEntries(C.modulos.map(m => [m.id, m]));
   const nome = id => (ITEM[id] ? ITEM[id].nome.replace(/\s*\(.*\)$/,"") : id);
-
-  const vazio = () => ({modulo:"", principal:"", secundarios:[], veiculo:"", tons:[], jogadas:[], briefing:{}});
-  let S = vazio();
-  let modoAutor = "principal";
-  const filtros = {autores:"todos", veiculos:"todos", tons:"todos", referencias:"todos"};
-  const buscas = {autores:""};
+  const curto = id => { const n = ITEM[id].nome; const q = n.match(/"([^"]+)"/); return q ? q[1] : n.replace(/,.*$/,""); };
+  const nomeModulo = id => { const m = MOD[id]; if (!m) return ""; const [tipo, area] = m.nome.split(" · "); return area ? `${tipo} de ${area.toLowerCase()}` : "Texto livre"; };
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const $ = s => document.querySelector(s);
-  const $$ = s => [...document.querySelectorAll(s)];
+
+  const ETAPAS = [
+    {id:"formato", rotulo:"Formato", pergunta:"O que você quer escrever?", ajuda:"Cada área traz regras próprias (o que a lei permite, clichês a evitar, a estrutura que funciona) e um perfil sugerido para começar."},
+    {id:"autores", rotulo:"Linguagem", camada:"autores", pergunta:"De quem vem a linguagem?", ajuda:"O autor principal define o vocabulário, o ritmo das frases e o jeito de pensar. A skill usa as técnicas dele, sem copiar o texto nem fingir ser ele."},
+    {id:"veiculos", rotulo:"Estrutura", camada:"veiculos", pergunta:"Como o texto é montado?", ajuda:"O veículo empresta a arquitetura: como o texto abre, em que ordem as ideias aparecem e como ele fecha."},
+    {id:"tons", rotulo:"Tom", camada:"tons", pergunta:"Com que postura você fala?", ajuda:"O tom é a relação com quem lê. Escolha um ou dois. Mais que isso, o texto perde a personalidade."},
+    {id:"referencias", rotulo:"Jogada", camada:"referencias", opcional:true, pergunta:"Quer usar uma jogada famosa?", ajuda:"Opcional. Uma técnica específica de um trabalho que o mundo reconhece como excelente, como assumir um defeito (\"Think Small\") ou contar dois destinos (\"Two Young Men\")."},
+    {id:"briefing", rotulo:"Briefing", opcional:true, pergunta:"Sobre o que é o texto?", ajuda:"Quanto mais fato concreto, menos genérico o resultado. O que ficar em branco, a IA vai perguntar antes de escrever."},
+    {id:"pronto", rotulo:"Arquivo", pergunta:"Seu perfil está pronto."}
+  ];
+  const vazio = () => ({modulo:"", principal:"", secundarios:[], veiculo:"", tons:[], jogadas:[], briefing:{}, nomePerfil:""});
+  let S = vazio(), etapa = 0, modoAutor = "principal", foco = {}, filtro = {}, busca = {}, anterior = {};
 
   const guardar = {
-    ler(){ try { return JSON.parse(localStorage.getItem("thewriter.perfis")||"[]"); } catch(e){ return []; } },
+    ler(){ try { return JSON.parse(localStorage.getItem("thewriter.perfis") || "[]"); } catch(e){ return []; } },
     gravar(v){ try { localStorage.setItem("thewriter.perfis", JSON.stringify(v)); return true; } catch(e){ return false; } }
   };
-  function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),2400); }
+  function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("on"), 2600); }
 
-  function renderModulos(){
-    const box = $("#modulos"); box.innerHTML="";
+  /* ---------- regras de avanço ---------- */
+  function falta(i){
+    const id = ETAPAS[i].id;
+    if (id === "formato" && !S.modulo) return "Escolha um formato para continuar.";
+    if (id === "autores" && !S.principal) return "Escolha o autor principal.";
+    if (id === "veiculos" && !S.veiculo) return "Escolha um veículo.";
+    if (id === "tons" && !S.tons.length) return "Escolha pelo menos um tom.";
+    return "";
+  }
+  const completo = () => !falta(0) && !falta(1) && !falta(2) && !falta(3);
+  function feito(i){
+    const id = ETAPAS[i].id;
+    if (id === "referencias") return S.jogadas.length > 0;
+    if (id === "briefing") return Object.values(S.briefing).some(v => (v || "").trim());
+    if (id === "pronto") return false;
+    return !falta(i);
+  }
+
+  /* ---------- trilha ---------- */
+  function renderTrilha(){
+    const n = $("#trilha"); n.innerHTML = "";
+    ETAPAS.forEach((e, i) => {
+      const b = document.createElement("button"); b.type = "button";
+      if (i === etapa) b.setAttribute("aria-current", "step");
+      if (feito(i)) b.classList.add("feito");
+      b.innerHTML = `<i>${feito(i) && i !== etapa ? "✓" : i + 1}</i>${e.rotulo}`;
+      b.onclick = () => irPara(i);
+      n.appendChild(b);
+    });
+  }
+  function irPara(i, rolar = true){
+    if (i === ETAPAS.length - 1 && !completo()){
+      const primeira = [0,1,2,3].find(k => falta(k));
+      toast(falta(primeira)); i = primeira;
+    }
+    etapa = i; renderTudo(true);
+    if (rolar){ const top = $("#montar").getBoundingClientRect().top + scrollY - 78; if (Math.abs(scrollY - top) > 40) scrollTo({top, behavior:"smooth"}); }
+  }
+
+  /* ---------- etapa ---------- */
+  function cabecalho(e, i){
+    return `<div class="etapa-cab"><span class="n">Passo ${i + 1} de ${ETAPAS.length}${e.opcional ? " · opcional" : ""}</span><h2>${e.pergunta}</h2><p>${e.ajuda || ""}</p></div>`;
+  }
+  function navegacao(i){
+    const e = ETAPAS[i], ultima = i === ETAPAS.length - 1, f = falta(i);
+    const prox = ETAPAS[i + 1];
+    return `<div class="nav-etapa">
+      <button class="pilula fantasma" type="button" data-nav="voltar" ${i === 0 ? "disabled" : ""}>Voltar</button>
+      <div class="dir">${f ? `<span class="falta">${f}</span>` : ""}
+        ${ultima ? "" : `<button class="pilula escura" type="button" data-nav="seguir" ${f ? "disabled" : ""}><span class="ponto"></span>${e.opcional && !feito(i) ? "Pular" : prox.id === "pronto" ? "Gerar arquivo" : "Continuar"}</button>`}
+      </div></div>`;
+  }
+  function renderEtapa(anima){
+    const e = ETAPAS[etapa], box = $("#etapa");
+    let corpo = "";
+    if (e.id === "formato") corpo = corpoFormato();
+    else if (e.camada) corpo = corpoCamada(e.camada);
+    else if (e.id === "briefing") corpo = corpoBriefing();
+    else corpo = corpoPronto();
+    box.innerHTML = cabecalho(e, etapa) + `<div class="etapa-corpo">${corpo}</div>` + navegacao(etapa);
+    if (anima){ box.classList.remove("entra"); void box.offsetWidth; box.classList.add("entra"); }
+    ligarEtapa();
+  }
+
+  function corpoFormato(){
+    let h = `<div class="opcoes formatos">`;
     C.modulos.forEach(m => {
-      const b = document.createElement("button");
-      b.type="button"; b.className="modulo"; b.setAttribute("aria-pressed", S.modulo===m.id);
       const [tipo, area] = m.nome.split(" · ");
-      b.innerHTML = area ? `<span>${tipo}</span><strong>${area}</strong>` : `<span>Sem regras de área</span><strong>${m.nome.split(" (")[0]}</strong>`;
-      b.onclick = () => escolherModulo(m);
-      box.appendChild(b);
+      h += `<button type="button" class="opcao grande" data-modulo="${m.id}" aria-pressed="${S.modulo === m.id}"><span>${area ? tipo : "Sem regras de área"}</span><strong>${area || "Livre"}</strong></button>`;
     });
-  }
-  function escolherModulo(m){
-    if (S.modulo === m.id){ S.modulo=""; atualizar(); return; }
-    S.modulo = m.id;
-    if (m.preset){ Object.assign(S, JSON.parse(JSON.stringify(m.preset))); toast("Perfil pronto aplicado. Ajuste o que quiser."); }
-    atualizar();
-  }
-  function renderFiltros(){
-    CAMADAS.forEach(c => {
-      const seg = document.querySelector(`[data-filtro="${c}"]`); seg.innerHTML="";
-      [{id:"todos",nome:"Todos"}, ...C[c].grupos].forEach(g => {
-        const b=document.createElement("button"); b.type="button"; b.textContent=g.nome;
-        b.setAttribute("aria-pressed", filtros[c]===g.id);
-        b.onclick=()=>{ filtros[c]=g.id; renderFiltros(); renderGrade(c); };
-        seg.appendChild(b);
-      });
-    });
+    h += `</div>`;
+    const m = MOD[S.modulo];
+    if (m && m.preset){
+      const p = m.preset;
+      const desc = `${nome(p.principal)}${p.secundarios.length ? " + " + p.secundarios.map(nome).join(" + ") : ""}, estrutura de ${nome(p.veiculo)}, tom ${p.tons.map(t => nome(t).toLowerCase()).join(" e ")}`;
+      h += `<div class="sugestao"><p>Perfil sugerido para <b>${nomeModulo(m.id).toLowerCase()}</b>: ${esc(desc)}.</p>
+        <div class="botoes"><button class="pilula azul" type="button" data-preset="briefing"><span class="ponto"></span>Usar sugestão</button><button class="pilula" type="button" data-preset="personalizar">Personalizar</button></div></div>`;
+    }
+    return h;
   }
   function papel(c, id){
-    if (c==="autores") return S.principal===id ? "principal" : S.secundarios.includes(id) ? "secundario" : "";
-    if (c==="veiculos") return S.veiculo===id ? "sim" : "";
-    if (c==="tons") return S.tons.includes(id) ? "sim" : "";
-    if (c==="referencias") return S.jogadas.includes(id) ? "sim" : "";
+    if (c === "autores") return S.principal === id ? "principal" : S.secundarios.includes(id) ? "toque" : "";
+    if (c === "veiculos") return S.veiculo === id ? "sim" : "";
+    if (c === "tons") return S.tons.includes(id) ? "sim" : "";
+    return S.jogadas.includes(id) ? "sim" : "";
   }
-  function renderGrade(c){
-    const box = document.querySelector(`[data-grade="${c}"]`); box.innerHTML="";
-    const termo = (buscas[c]||"").toLowerCase();
+  function corpoCamada(c){
+    const grupos = C[c].grupos, f = filtro[c] || "todos", termo = (busca[c] || "").toLowerCase();
+    let det = "";
+    const id = foco[c] || (c === "autores" ? S.principal : c === "veiculos" ? S.veiculo : c === "tons" ? S.tons[0] : S.jogadas[0]);
+    if (id && ITEM[id]){
+      const i = ITEM[id];
+      const rot = {autores:"O que este autor faz no seu texto", veiculos:"Como esta estrutura organiza o texto", tons:"Como este tom aparece", referencias:"A jogada"}[c];
+      det = `<div class="detalhe"><h3>${rot}</h3><h4>${esc(i.nome)}</h4><p>${esc(i.resumo)}</p><ul>${i.tecnicas.map(t => `<li>${esc(t)}</li>`).join("")}</ul><p class="evitar">Cuidado: ${esc(i.evitar)}</p></div>`;
+    }
+    let h = det + `<div class="controles" style="margin-top:${det ? 18 : 0}px">`;
+    if (c === "autores") h += `<div class="seg" role="group" aria-label="O que você está escolhendo"><button type="button" data-modo="principal" aria-pressed="${modoAutor === "principal"}">Autor principal</button><button type="button" data-modo="toque" aria-pressed="${modoAutor === "toque"}">Toques extras</button></div>`;
+    h += `<input class="busca" type="search" placeholder="Buscar" value="${esc(busca[c] || "")}" data-busca="${c}" aria-label="Buscar"></div>`;
+    if (c === "autores") h += `<p class="dica-modo">${modoAutor === "principal" ? "Clique em um autor para defini-lo como principal." : "Opcional: até dois autores que aparecem em um ou dois momentos do texto, com peso menor."}</p>`;
+    h += `<div class="controles"><div class="seg" role="group" aria-label="Grupos">` +
+      [{id:"todos", nome:"Todos"}, ...grupos].map(g => `<button type="button" data-filtro="${g.id}" aria-pressed="${f === g.id}">${g.nome}</button>`).join("") + `</div></div>`;
+    h += `<div class="opcoes">`;
     let total = 0;
-    C[c].grupos.forEach(g => {
-      if (filtros[c]!=="todos" && filtros[c]!==g.id) return;
-      const itens = g.itens.filter(i => !termo || (i.nome+" "+i.resumo).toLowerCase().includes(termo));
+    grupos.forEach(g => {
+      if (f !== "todos" && f !== g.id) return;
+      const itens = g.itens.filter(i => !termo || (i.nome + " " + i.resumo).toLowerCase().includes(termo));
       if (!itens.length) return;
       total += itens.length;
-      if (filtros[c]==="todos"){ const h=document.createElement("p"); h.className="grupo-nome"; h.textContent=g.nome; box.appendChild(h); }
-      const wrap=document.createElement("div"); wrap.className="chips";
+      if (f === "todos") h += `<p class="grupo-nome">${g.nome}</p>`;
       itens.forEach(i => {
-        const b=document.createElement("button"); b.type="button"; b.className="chip";
-        const p = papel(c, i.id); if (p) b.dataset.papel=p;
-        b.setAttribute("aria-pressed", !!p);
-        b.title = i.resumo;
-        b.innerHTML = `<span>${i.nome}</span>` + (p==="principal" ? `<span class="marca">principal</span>` : p==="secundario" ? `<span class="marca">secundário</span>` : "");
-        b.onclick = () => alternar(c, i.id);
-        wrap.appendChild(b);
+        const p = papel(c, i.id);
+        const cls = p === "toque" ? "opcao toque" : "opcao";
+        const selo = p === "principal" ? `<span class="selo">principal</span>` : p === "toque" ? `<span class="selo">toque</span>` : "";
+        h += `<button type="button" class="${cls}" data-item="${i.id}" aria-pressed="${!!p}">${selo}<strong>${esc(i.nome)}</strong><span>${esc(i.resumo)}</span></button>`;
       });
-      box.appendChild(wrap);
     });
-    if (!total) box.innerHTML = `<p class="vazio">Nada encontrado. Tente outro nome.</p>`;
+    if (!total) h += `<p class="vazio">Nada encontrado com esse nome.</p>`;
+    h += `</div>`;
+    return h;
   }
-  function mostrarFicha(c, id){
-    const f = document.querySelector(`[data-ficha="${c}"]`); const i = ITEM[id];
-    f.innerHTML = `<h3>${i.nome}</h3><p>${i.resumo}</p><ul>${i.tecnicas.map(t=>`<li>${t}</li>`).join("")}</ul><p class="evitar">Evitar: ${i.evitar}</p>`;
-    f.classList.remove("aberta"); void f.offsetWidth; f.classList.add("aberta");
+  function corpoBriefing(){
+    const b = S.briefing, v = k => esc(b[k] || "");
+    const canais = ["", "instagram", "linkedin", "tiktok (roteiro)", "x/threads", "newsletter", "blog/site", "e-mail", "impresso"];
+    return `<div class="campos">
+      <div class="campo largo"><label for="b-tema">Tema</label><input id="b-tema" data-b="tema" value="${v("tema")}" placeholder="Ex.: por que o parcelado no cartão sai mais caro"></div>
+      <div class="campo"><label for="b-publico">Para quem</label><input id="b-publico" data-b="publico" value="${v("publico")}" placeholder="Ex.: jovens no primeiro emprego"></div>
+      <div class="campo"><label for="b-canal">Onde vai ser publicado</label><select id="b-canal" data-b="canal">${canais.map(c => `<option value="${c}" ${b.canal === c ? "selected" : ""}>${c || "A IA decide"}</option>`).join("")}</select></div>
+      <div class="campo"><label for="b-objetivo">Objetivo</label><input id="b-objetivo" data-b="objetivo" value="${v("objetivo")}" placeholder="Ex.: educar e gerar salvamentos"></div>
+      <div class="campo"><label for="b-cta">O que o leitor deve fazer no fim</label><input id="b-cta" data-b="cta" value="${v("cta")}" placeholder="Ex.: salvar para consultar antes de comprar"></div>
+      <div class="campo largo"><label for="b-fatos">Fatos e provas <small>números, fontes, histórias reais, depoimentos que você tem</small></label><textarea id="b-fatos" data-b="fatos" placeholder="Ex.: juros do rotativo segundo o Banco Central em setembro; caso de um cliente (com autorização)">${v("fatos")}</textarea></div>
+    </div>`;
   }
-  function alternar(c, id){
-    const tirar = (arr) => arr.filter(x=>x!==id);
-    if (c==="autores"){
-      if (modoAutor==="principal"){
-        if (S.principal===id){ S.principal=""; } else { S.secundarios = tirar(S.secundarios); S.principal=id; }
+  function nomeSugerido(){ return [S.principal && nome(S.principal), S.veiculo && nome(S.veiculo)].filter(Boolean).join(" × "); }
+  function corpoPronto(){
+    return `<div class="pronto-nome"><label for="nome-perfil">Nome do perfil</label><input id="nome-perfil" value="${esc(S.nomePerfil || nomeSugerido())}"></div>
+      <div class="baixar">
+        <button class="pilula azul" type="button" id="baixar"><span class="ponto"></span>Baixar arquivo .md</button>
+        <button class="pilula" type="button" id="copiar-md">Copiar texto</button>
+        <button class="pilula" type="button" id="salvar">Salvar perfil</button>
+        <button class="pilula" type="button" id="copiar-link">Copiar link</button>
+      </div>
+      <div class="usar">
+        <div><b>1</b><strong>Baixe o arquivo</strong><span>Ele traz seu perfil, as regras da área, a revisão anti-IA e o briefing.</span></div>
+        <div><b>2</b><strong>Anexe ou cole no Claude</strong><span>Numa conversa nova, envie o arquivo como anexo ou cole o texto dele.</span></div>
+        <div><b>3</b><strong>Peça o texto</strong><span>Escreva, por exemplo: "Escreva o carrossel". A IA segue o perfil e marca o que precisa confirmar.</span></div>
+      </div>
+      <details class="previa"><summary>Ver o conteúdo do arquivo</summary><pre id="previa"></pre></details>
+      <p class="avancado">Usa o Claude Code? <a href="https://github.com/Gudradee/TheWriter">Instale a skill</a> para ter o catálogo completo sempre à mão.</p>`;
+  }
+
+  /* ---------- interações da etapa ---------- */
+  function ligarEtapa(){
+    const box = $("#etapa");
+    box.querySelectorAll("[data-nav]").forEach(b => b.onclick = () => {
+      const a = b.dataset.nav;
+      if (a === "voltar") irPara(Math.max(0, etapa - 1));
+      else irPara(Math.min(ETAPAS.length - 1, etapa + 1));
+    });
+    box.querySelectorAll("[data-modulo]").forEach(b => b.onclick = () => {
+      S.modulo = b.dataset.modulo;
+      if (!MOD[S.modulo].preset){ renderTudo(); irPara(1); return; }
+      renderTudo();
+    });
+    box.querySelectorAll("[data-preset]").forEach(b => b.onclick = () => {
+      const p = MOD[S.modulo].preset;
+      Object.assign(S, JSON.parse(JSON.stringify(p)));
+      foco = {};
+      toast(b.dataset.preset === "briefing" ? "Perfil sugerido aplicado. Agora conte sobre o texto." : "Perfil sugerido aplicado. Ajuste cada camada.");
+      irPara(b.dataset.preset === "briefing" ? 5 : 1);
+    });
+    box.querySelectorAll("[data-modo]").forEach(b => b.onclick = () => { modoAutor = b.dataset.modo; renderEtapa(); });
+    box.querySelectorAll("[data-filtro]").forEach(b => b.onclick = () => { filtro[ETAPAS[etapa].camada] = b.dataset.filtro; renderEtapa(); });
+    box.querySelectorAll("[data-busca]").forEach(i => i.oninput = () => {
+      busca[i.dataset.busca] = i.value; const pos = i.selectionStart; renderEtapa();
+      const n = $("#etapa [data-busca]"); n.focus(); n.setSelectionRange(pos, pos);
+    });
+    box.querySelectorAll("[data-item]").forEach(b => b.onclick = () => escolher(ETAPAS[etapa].camada, b.dataset.item));
+    box.querySelectorAll("[data-b]").forEach(el => el.oninput = el.onchange = () => { S.briefing[el.dataset.b] = el.value; renderReceita(); renderTrilha(); salvarLink(); });
+    const np = $("#nome-perfil"); if (np) np.oninput = () => { S.nomePerfil = np.value; atualizarPrevia(); salvarLink(); };
+    if ($("#baixar")){
+      atualizarPrevia();
+      $("#baixar").onclick = baixar;
+      $("#copiar-md").onclick = () => copiar(gerarMD(), "Texto copiado. Cole numa conversa com o Claude.");
+      $("#copiar-link").onclick = () => copiar(location.href, "Link do perfil copiado.");
+      $("#salvar").onclick = salvarPerfil;
+    }
+  }
+  function escolher(c, id){
+    const tirar = a => a.filter(x => x !== id);
+    if (c === "autores"){
+      if (modoAutor === "principal"){
+        if (S.principal === id) S.principal = "";
+        else { S.secundarios = tirar(S.secundarios); S.principal = id; }
       } else {
         if (S.secundarios.includes(id)) S.secundarios = tirar(S.secundarios);
         else {
-          if (S.principal===id) S.principal="";
-          if (S.secundarios.length>=LIMITES.secundarios){ toast("Até 2 secundários. Tire um antes de escolher outro."); return; }
+          if (S.principal === id){ toast("Esse já é o autor principal."); return; }
+          if (S.secundarios.length >= 2){ toast("Até 2 toques extras. Tire um antes de escolher outro."); return; }
           S.secundarios.push(id);
         }
       }
     }
-    if (c==="veiculos") S.veiculo = S.veiculo===id ? "" : id;
-    if (c==="tons"){
+    if (c === "veiculos") S.veiculo = S.veiculo === id ? "" : id;
+    if (c === "tons"){
       if (S.tons.includes(id)) S.tons = tirar(S.tons);
-      else { if (S.tons.length>=LIMITES.tons){ toast("Até 2 tons. Mais que isso vira mingau."); return; } S.tons.push(id); }
+      else { if (S.tons.length >= 2){ toast("Até 2 tons. Mais que isso, o texto perde a personalidade."); return; } S.tons.push(id); }
     }
-    if (c==="referencias"){
+    if (c === "referencias"){
       if (S.jogadas.includes(id)) S.jogadas = tirar(S.jogadas);
-      else { if (S.jogadas.length>=LIMITES.jogadas){ toast("Até 2 jogadas por texto."); return; } S.jogadas.push(id); }
+      else { if (S.jogadas.length >= 2){ toast("Até 2 jogadas por texto."); return; } S.jogadas.push(id); }
     }
-    mostrarFicha(c, id);
-    atualizar();
+    foco[c] = id;
+    const rolagem = $("#etapa .opcoes") ? $("#etapa .opcoes").scrollTop : 0;
+    renderTudo();
+    const o = $("#etapa .opcoes"); if (o) o.scrollTop = rolagem;
   }
 
-  let anterior = {};
-  function em(chave, valor, texto){ return `<em class="${anterior[chave]!==valor ? "novo" : ""}">${texto}</em>`; }
-  function lista(arr){ return arr.length<2 ? arr.join("") : arr.slice(0,-1).join(", ")+" e "+arr[arr.length-1]; }
-  function curto(j){ const n=ITEM[j].nome; const q=n.match(/"([^"]+)"/); return q?q[1]:n.replace(/,.*$/,""); }
-  function receita(){
+  /* ---------- receita ---------- */
+  function em(k, v, t){ return `<em class="${anterior[k] !== v ? "novo" : ""}">${esc(t)}</em>`; }
+  const lista = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " e " + a[a.length - 1];
+  function frase(){
     const pend = t => `<span class="pend">${t}</span>`;
-    let r = "Linguagem de ";
-    r += S.principal ? em("p", S.principal, nome(S.principal)) : pend("um autor");
-    if (S.secundarios.length) r += ", com um toque de " + em("s", S.secundarios.join(), lista(S.secundarios.map(nome)));
-    r += ", estrutura de ";
-    r += S.veiculo ? em("v", S.veiculo, nome(S.veiculo)) : pend("um veículo");
-    r += ", tom ";
-    r += S.tons.length ? em("t", S.tons.join(), lista(S.tons.map(t=>nome(t).toLowerCase()))) : pend("à sua escolha");
-    if (S.jogadas.length) r += ", com a jogada de " + em("j", S.jogadas.join(), lista(S.jogadas.map(curto)));
-    r += ".";
+    let r = "Linguagem de " + (S.principal ? em("p", S.principal, nome(S.principal)) : pend("um autor"));
+    if (S.secundarios.length) r += ", com toques de " + em("s", S.secundarios.join(), lista(S.secundarios.map(nome)));
+    r += ", estrutura de " + (S.veiculo ? em("v", S.veiculo, nome(S.veiculo)) : pend("um veículo"));
+    r += ", tom " + (S.tons.length ? em("t", S.tons.join(), lista(S.tons.map(t => nome(t).toLowerCase()))) : pend("a escolher"));
+    if (S.jogadas.length) r += ", com a jogada " + em("j", S.jogadas.join(), lista(S.jogadas.map(curto)));
     anterior = {p:S.principal, s:S.secundarios.join(), v:S.veiculo, t:S.tons.join(), j:S.jogadas.join()};
-    return r;
+    return r + ".";
   }
-  function dosagem(){
-    const partes = [
-      ["principal", S.principal?5:0, "Autor principal"],
-      ["secundarios", S.secundarios.length*1.5, "Secundários"],
-      ["veiculo", S.veiculo?3:0, "Veículo"],
-      ["tons", S.tons.length?2.5:0, "Tom"],
-      ["jogadas", S.jogadas.length*1, "Jogadas"]
-    ];
-    $("#dosagem").innerHTML = partes.filter(p=>p[1]).map(([k,v])=>`<i style="flex-grow:${v};background:${CORES[k]}"></i>`).join("");
-    $("#legenda").innerHTML = partes.filter(p=>p[1]).map(([k,,n])=>`<span><b style="background:${CORES[k]}"></b>${n}</span>`).join("");
-  }
-  function bloco(){
-    const b = S.briefing;
-    return [
-      "[the Writer · perfil]",
-      `modulo: ${S.modulo||"livre"}`,
-      `principal: ${S.principal}`,
-      `secundarios: ${S.secundarios.join(", ")}`,
-      `veiculo: ${S.veiculo}`,
-      `tons: ${S.tons.join(", ")}`,
-      `jogadas: ${S.jogadas.join(", ")}`,
-      `canal: ${b.canal||""}`,
-      "[briefing]",
-      `tema: ${b.tema||""}`,
-      `publico: ${b.publico||""}`,
-      `objetivo: ${b.objetivo||""}`,
-      `fatos: ${(b.fatos||"").replace(/\n+/g," / ")}`,
-      `cta: ${b.cta||""}`
-    ].join("\n");
-  }
-  function avisos(){
-    const a = [];
-    if (!S.principal) a.push("Escolha um autor principal.");
-    if (!S.veiculo) a.push("Escolha um veículo.");
-    if (!(S.briefing.fatos||"").trim() && S.principal && S.veiculo) a.push("Sem fatos no briefing, a skill vai perguntar ou marcar trechos para confirmar.");
-    const el=$("#aviso"); el.textContent=a.join(" "); el.classList.toggle("on", !!a.length);
-  }
-  function atualizar(){
-    renderModulos(); CAMADAS.forEach(renderGrade);
-    $("#receita").innerHTML = receita();
-    $("#receita-curta").textContent = $("#receita").textContent;
-    dosagem(); avisos();
-    $("#bloco").textContent = bloco();
-    try { history.replaceState(null, "", "#p=" + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(S)))))); } catch(e){}
+  function renderReceita(){
+    $("#frase").innerHTML = frase();
+    const linha = (r, v, i) => `<li><button type="button" data-ir="${i}"><span class="r">${r}</span><span class="v ${v ? "" : "pend"}">${v ? esc(v) : ETAPAS[i].opcional ? "opcional" : "a escolher"}</span></button></li>`;
+    const temBrief = Object.values(S.briefing).some(v => (v || "").trim());
+    $("#linhas").innerHTML =
+      linha("Formato", S.modulo ? nomeModulo(S.modulo) : "", 0) +
+      linha("Linguagem", S.principal ? nome(S.principal) + (S.secundarios.length ? " + " + S.secundarios.map(nome).join(" + ") : "") : "", 1) +
+      linha("Estrutura", S.veiculo ? nome(S.veiculo) : "", 2) +
+      linha("Tom", S.tons.map(nome).join(", "), 3) +
+      linha("Jogada", S.jogadas.length ? S.jogadas.map(curto).join(", ") : "", 4) +
+      linha("Briefing", temBrief ? (S.briefing.tema || "preenchido") : "", 5);
+    $("#linhas").querySelectorAll("[data-ir]").forEach(b => b.onclick = () => { $("#receita").classList.remove("aberta"); irPara(+b.dataset.ir); });
+    $("#ir-pronto").hidden = etapa === ETAPAS.length - 1;
+    const m = $("#resumo-movel"); m.textContent = `Passo ${etapa + 1} de ${ETAPAS.length}` + (S.principal ? ` · ${nome(S.principal)}` : "") + (S.veiculo ? ` × ${nome(S.veiculo)}` : "");
   }
   function renderSalvos(){
-    const v = guardar.ler(); const box=$("#lista-salvos"); box.innerHTML="";
-    $("#salvos").classList.toggle("on", v.length>0);
+    const v = guardar.ler(), box = $("#lista-salvos"); box.innerHTML = "";
+    $("#salvos").hidden = !v.length;
     v.forEach((p, idx) => {
-      const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=p.nome;
-      b.title="Carregar este perfil. Alt + clique apaga.";
-      b.onclick=(e)=>{
-        if (e.altKey){ v.splice(idx,1); guardar.gravar(v); renderSalvos(); toast("Perfil apagado"); return; }
-        S = {...vazio(), ...JSON.parse(JSON.stringify(p.estado))}; preencherBriefing(); atualizar(); toast(`Perfil "${p.nome}" carregado`);
+      const b = document.createElement("button"); b.type = "button"; b.textContent = p.nome; b.title = "Carregar. Alt + clique apaga.";
+      b.onclick = e => {
+        if (e.altKey){ v.splice(idx, 1); guardar.gravar(v); renderSalvos(); toast("Perfil apagado."); return; }
+        S = {...vazio(), ...JSON.parse(JSON.stringify(p.estado))}; toast(`Perfil "${p.nome}" carregado.`); irPara(ETAPAS.length - 1);
       };
       box.appendChild(b);
     });
   }
-  function preencherBriefing(){ $$("[data-b]").forEach(el => el.value = S.briefing[el.dataset.b]||""); }
+
+  /* ---------- arquivo .md ---------- */
+  const desce = (md, n) => md.replace(/^(#{1,6}) /gm, (m, h) => "#".repeat(Math.min(6, h.length + n)) + " ");
+  const limpaModulo = md => md.split("\n").filter(l => !/^Herda `/.test(l)).join("\n").trim();
+  function ficha(rotulo, id, extra){
+    const i = ITEM[id];
+    return `### ${rotulo}: ${i.nome}\n${extra ? `_${extra}_\n\n` : ""}${i.resumo}\n\n${i.tecnicas.map(t => `- ${t}`).join("\n")}\n\nEvitar: ${i.evitar}\n`;
+  }
+  function gerarMD(){
+    const titulo = (S.nomePerfil || nomeSugerido() || "Perfil").trim();
+    const b = S.briefing, val = k => (b[k] || "").trim() || "_não informado: pergunte antes de escrever_";
+    const mod = MOD[S.modulo];
+    const fraseTexto = $("#frase").textContent;
+    let md = `# the Writer · ${titulo}\n\n`;
+    md += `> **Como usar:** envie este arquivo (ou cole o texto dele) numa conversa com o Claude e, logo abaixo, faça seu pedido. Exemplo: "Escreva o texto." A IA vai seguir o perfil e as regras abaixo.\n\n`;
+    md += `**Formato:** ${nomeModulo(S.modulo) || "Texto livre"}  \n**Perfil:** ${fraseTexto}\n\n---\n\n`;
+    md += `## 1. Instruções para a IA\n\nVocê vai escrever em português do Brasil seguindo o perfil de escrita deste arquivo. O perfil combina técnicas de referências diferentes para criar um estilo próprio. Siga este fluxo:\n\n`;
+    md += [
+      "**Leia o arquivo inteiro antes de escrever.** Use as técnicas descritas, não os nomes: o leitor deve reconhecer a técnica sem que o autor seja citado ou copiado.",
+      "**Confira o briefing (seção 5).** Se faltar tema, público, objetivo ou um fato essencial, faça todas as perguntas de uma vez antes de escrever.",
+      "**Nunca invente** número, estudo, depoimento, citação, resultado de cliente ou fala de pessoa real. Se faltar uma informação, escreva `[CONFIRMAR: o que falta]` no lugar.",
+      "**Imite a técnica, nunca o texto.** Não reproduza trechos de obras, slogans ou bordões, e não escreva como se fosse a pessoa real.",
+      "**Respeite as regras da área (seção 3).** Elas valem mais que o perfil.",
+      "**Dosagem:** o autor principal define a linguagem do texto inteiro; os toques extras aparecem em um ou dois momentos; o veículo define a estrutura; o tom define a postura; a jogada, se houver, aparece uma vez, no ponto em que fizer mais efeito.",
+      "**Escreva o rascunho e depois faça a revisão anti-IA (seção 4).** Reescreva tudo o que encontrar e responda ao teste final.",
+      "**Entregue:** (a) duas ou três linhas dizendo como cada camada do perfil entrou no texto; (b) o texto final, no formato da área; (c) notas de revisão, com os trechos `[CONFIRMAR]` e uma sugestão de variação."
+    ].map((t, i) => `${i + 1}. ${t}`).join("\n") + "\n\n";
+    md += `## 2. O perfil\n\n`;
+    md += ficha("Linguagem (autor principal)", S.principal, "Define o vocabulário, o ritmo e o jeito de pensar do texto inteiro.") + "\n";
+    S.secundarios.forEach(id => md += ficha("Toque extra", id, "Peso menor: aparece em um ou dois momentos.") + "\n");
+    md += ficha("Estrutura (veículo)", S.veiculo, "Define como o texto abre, se organiza e fecha.") + "\n";
+    S.tons.forEach(id => md += ficha("Tom", id) + "\n");
+    S.jogadas.forEach(id => md += ficha("Jogada de referência", id, "Use a técnica uma vez, sem copiar o original.") + "\n");
+    md += `## 3. Regras da área\n\n`;
+    if (mod && mod.tipo !== "livre"){
+      md += desce(limpaModulo(T.bases[mod.tipo]), 2) + "\n\n" + desce(limpaModulo(T.modulos[mod.id]), 2) + "\n\n";
+    } else {
+      md += "Texto livre, sem regras de área específicas. Ainda assim: nada de propaganda enganosa, promessa sem prova ou dado sem fonte.\n\n";
+    }
+    md += `## 4. Revisão anti-IA\n\n` + desce(T.antiIA.replace(/^# .*\n+/, ""), 1).trim() + "\n\n";
+    md += `## 5. Briefing\n\n- **Tema:** ${val("tema")}\n- **Para quem:** ${val("publico")}\n- **Onde vai ser publicado:** ${(b.canal || "").trim() || "_a IA decide pelo formato_"}\n- **Objetivo:** ${val("objetivo")}\n- **Fatos e provas:** ${val("fatos").replace(/\n+/g, "; ")}\n- **O que o leitor deve fazer no fim:** ${val("cta")}\n\n`;
+    md += `---\n\n_Gerado no the Writer (gudradee.github.io/TheWriter)._\n`;
+    return md;
+  }
+  function atualizarPrevia(){ const p = $("#previa"); if (p) p.textContent = gerarMD(); }
+  const slug = t => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  function baixar(){
+    const md = gerarMD();
+    const nomeArq = `the-writer-${slug(S.nomePerfil || nomeSugerido() || "perfil")}.md`;
+    try {
+      const url = URL.createObjectURL(new Blob([md], {type:"text/markdown;charset=utf-8"}));
+      const a = document.createElement("a"); a.href = url; a.download = nomeArq; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      toast(`Arquivo ${nomeArq} baixado.`);
+    } catch(e){ copiar(md, "Não deu para baixar aqui. O texto foi copiado."); }
+  }
   async function copiar(texto, ok){
     try { await navigator.clipboard.writeText(texto); toast(ok); }
     catch(e){
-      const t=document.createElement("textarea"); t.value=texto; document.body.appendChild(t); t.select();
-      try { document.execCommand("copy"); toast(ok); } catch(_){ toast("Não deu para copiar. Selecione o texto e copie à mão."); }
+      const t = document.createElement("textarea"); t.value = texto; document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); toast(ok); } catch(_){ toast("Não deu para copiar. Abra a prévia e copie à mão."); }
       t.remove();
     }
   }
-
-  $$("[data-papel-modo]").forEach(b => b.onclick = () => { modoAutor = b.dataset.papelModo; $$("[data-papel-modo]").forEach(x => x.setAttribute("aria-pressed", x===b)); });
-  $$("[data-busca]").forEach(i => i.oninput = () => { buscas[i.dataset.busca]=i.value; renderGrade(i.dataset.busca); });
-  $$("[data-b]").forEach(el => el.oninput = el.onchange = () => { S.briefing[el.dataset.b]=el.value; avisos(); $("#bloco").textContent=bloco(); });
-  $("#copiar").onclick = () => copiar(bloco(), "Comando copiado. Cole numa conversa com o Claude.");
-  $("#link").onclick = () => copiar(location.href, "Link do perfil copiado");
-  $("#limpar").onclick = () => { S=vazio(); preencherBriefing(); $$(".ficha").forEach(f=>f.classList.remove("aberta")); atualizar(); toast("Perfil zerado"); };
-  $("#salvar").onclick = () => {
-    if (!S.principal){ toast("Escolha pelo menos o autor principal."); return; }
-    const sugestao = [nome(S.principal), S.veiculo && nome(S.veiculo)].filter(Boolean).join(" + ");
-    const n = prompt("Nome do perfil", sugestao); if (!n) return;
-    const v = guardar.ler(); v.unshift({nome:n, estado:S});
-    if (guardar.gravar(v.slice(0,20))){ renderSalvos(); toast("Perfil salvo neste navegador"); }
+  function salvarPerfil(){
+    const n = (S.nomePerfil || nomeSugerido()).trim();
+    const v = guardar.ler().filter(p => p.nome !== n); v.unshift({nome:n, estado:S});
+    if (guardar.gravar(v.slice(0, 20))){ renderSalvos(); toast(`Perfil "${n}" salvo neste navegador.`); }
     else toast("Este navegador não permite salvar. Use Copiar link.");
-  };
-  $("#abrir-resumo").onclick = () => { const ab=$("#resumo").classList.toggle("aberto"); $("#abrir-resumo").lastChild.textContent = ab ? "Fechar" : "Ver perfil"; };
+  }
+  function salvarLink(){ try { history.replaceState(null, "", "#p=" + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(S)))))); } catch(e){} }
 
-  try { const m = location.hash.match(/#p=(.+)/); if (m){ S = {...vazio(), ...JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))))}; } } catch(e){ S = vazio(); }
-  preencherBriefing(); renderFiltros(); renderSalvos(); atualizar();
+  function renderTudo(anima){ renderTrilha(); renderEtapa(anima); renderReceita(); salvarLink(); }
+
+  $("#ir-pronto").onclick = () => { $("#receita").classList.remove("aberta"); irPara(ETAPAS.length - 1); };
+  $("#abrir-receita").onclick = () => { const a = $("#receita").classList.toggle("aberta"); $("#abrir-receita").lastChild.textContent = a ? "Fechar" : "Ver receita"; };
+  new IntersectionObserver(([e]) => $("#barra-movel").classList.toggle("on", e.isIntersecting), {threshold:.05}).observe($("#montar"));
+
+  try { const m = location.hash.match(/#p=(.+)/); if (m){ S = {...vazio(), ...JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))))}; if (completo()) etapa = ETAPAS.length - 1; } } catch(e){ S = vazio(); }
+  renderSalvos(); renderTudo();
 })();
 </script>
 </body>
