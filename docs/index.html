@@ -155,6 +155,8 @@
   .baixar .pilula.azul{padding:16px 26px;font-size:17px}
   .baixar .pilula:not(.azul){background:var(--cinza)}
   .baixar .pilula:not(.azul):hover{background:var(--azul-claro)}
+  .aviso-download{margin:-12px 0 24px;background:var(--azul-claro);border-radius:14px;padding:12px 16px;font-size:14px}
+  .aviso-download a{color:var(--azul);font-weight:600}
   .usar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
   .usar div{background:var(--cinza);border-radius:var(--raio-m);padding:18px}
   .usar b{display:block;font-size:13px;color:var(--azul);font-weight:500;margin-bottom:8px}
@@ -298,7 +300,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
-<script src="catalogo.js"></script>
+<script src="catalogo.js?v=6febecbaa1"></script>
 <script>
 /* ---------- caneta escrevendo o logo ---------- */
 (() => {
@@ -565,10 +567,11 @@
         <button class="pilula" type="button" id="salvar">Salvar perfil</button>
         <button class="pilula" type="button" id="copiar-link">Copiar link</button>
       </div>
+      <p class="aviso-download" id="aviso-download" hidden></p>
       <div class="usar">
-        <div><b>1</b><strong>Baixe o arquivo</strong><span>Ele traz seu perfil, as regras da área, a revisão anti-IA e o briefing.</span></div>
+        <div><b>1</b><strong>Baixe o arquivo</strong><span>Uma skill completa: ativação, seu estilo camada por camada, regras da área, revisão anti-IA, comandos e o catálogo inteiro para trocar de perfil na conversa.</span></div>
         <div><b>2</b><strong>Anexe ou cole no Claude</strong><span>Numa conversa nova, envie o arquivo como anexo ou cole o texto dele.</span></div>
-        <div><b>3</b><strong>Peça o texto</strong><span>Escreva, por exemplo: "Escreva o carrossel". A IA segue o perfil e marca o que precisa confirmar.</span></div>
+        <div><b>3</b><strong>Peça o texto</strong><span>O modo the Writer fica ativo na conversa inteira. Peça o texto, peça outra versão ou troque o tom quando quiser.</span></div>
       </div>
       <details class="previa"><summary>Ver o conteúdo do arquivo</summary><pre id="previa"></pre></details>
       <p class="avancado">Usa o Claude Code? <a href="https://github.com/Gudradee/TheWriter">Instale a skill</a> para ter o catálogo completo sempre à mão.</p>`;
@@ -606,7 +609,7 @@
     if ($("#baixar")){
       atualizarPrevia();
       $("#baixar").onclick = baixar;
-      $("#copiar-md").onclick = () => copiar(gerarMD(), "Texto copiado. Cole numa conversa com o Claude.");
+      $("#copiar-md").onclick = () => { try { copiar(gerarMD(), "Texto copiado. Cole numa conversa com o Claude."); } catch(e){ toast("Não consegui gerar o texto. Recarregue a página (Ctrl+Shift+R)."); } };
       $("#copiar-link").onclick = () => copiar(location.href, "Link do perfil copiado.");
       $("#salvar").onclick = salvarPerfil;
     }
@@ -690,52 +693,149 @@
     return `### ${rotulo}: ${i.nome}\n${extra ? `_${extra}_\n\n` : ""}${i.resumo}\n\n${i.tecnicas.map(t => `- ${t}`).join("\n")}\n\nEvitar: ${i.evitar}\n`;
   }
   function gerarMD(){
+    if (!T || !T.antiIA) throw new Error("textos ausentes");
     const titulo = (S.nomePerfil || nomeSugerido() || "Perfil").trim();
-    const b = S.briefing, val = k => (b[k] || "").trim() || "_não informado: pergunte antes de escrever_";
+    const b = S.briefing, tem = k => (b[k] || "").trim();
+    const val = k => tem(k) || "_não informado_";
     const mod = MOD[S.modulo];
+    const formato = nomeModulo(S.modulo) || "Texto livre";
     const fraseTexto = $("#frase").textContent;
-    let md = `# the Writer · ${titulo}\n\n`;
-    md += `> **Como usar:** envie este arquivo (ou cole o texto dele) numa conversa com o Claude e, logo abaixo, faça seu pedido. Exemplo: "Escreva o texto." A IA vai seguir o perfil e as regras abaixo.\n\n`;
-    md += `**Formato:** ${nomeModulo(S.modulo) || "Texto livre"}  \n**Perfil:** ${fraseTexto}\n\n---\n\n`;
-    md += `## 1. Instruções para a IA\n\nVocê vai escrever em português do Brasil seguindo o perfil de escrita deste arquivo. O perfil combina técnicas de referências diferentes para criar um estilo próprio. Siga este fluxo:\n\n`;
-    md += [
-      "**Leia o arquivo inteiro antes de escrever.** Use as técnicas descritas, não os nomes: o leitor deve reconhecer a técnica sem que o autor seja citado ou copiado.",
-      "**Confira o briefing (seção 5).** Se faltar tema, público, objetivo ou um fato essencial, faça todas as perguntas de uma vez antes de escrever.",
-      "**Nunca invente** número, estudo, depoimento, citação, resultado de cliente ou fala de pessoa real. Se faltar uma informação, escreva `[CONFIRMAR: o que falta]` no lugar.",
-      "**Imite a técnica, nunca o texto.** Não reproduza trechos de obras, slogans ou bordões, e não escreva como se fosse a pessoa real.",
-      "**Respeite as regras da área (seção 3).** Elas valem mais que o perfil.",
-      "**Dosagem:** o autor principal define a linguagem do texto inteiro; os toques extras aparecem em um ou dois momentos; o veículo define a estrutura; o tom define a postura; a jogada, se houver, aparece uma vez, no ponto em que fizer mais efeito.",
-      "**Escreva o rascunho e depois faça a revisão anti-IA (seção 4).** Reescreva tudo o que encontrar e responda ao teste final.",
-      "**Entregue:** (a) duas ou três linhas dizendo como cada camada do perfil entrou no texto; (b) o texto final, no formato da área; (c) notas de revisão, com os trechos `[CONFIRMAR]` e uma sugestão de variação."
-    ].map((t, i) => `${i + 1}. ${t}`).join("\n") + "\n\n";
-    md += `## 2. O perfil\n\n`;
-    md += ficha("Linguagem (autor principal)", S.principal, "Define o vocabulário, o ritmo e o jeito de pensar do texto inteiro.") + "\n";
-    S.secundarios.forEach(id => md += ficha("Toque extra", id, "Peso menor: aparece em um ou dois momentos.") + "\n");
-    md += ficha("Estrutura (veículo)", S.veiculo, "Define como o texto abre, se organiza e fecha.") + "\n";
-    S.tons.forEach(id => md += ficha("Tom", id) + "\n");
-    S.jogadas.forEach(id => md += ficha("Jogada de referência", id, "Use a técnica uma vez, sem copiar o original.") + "\n");
-    md += `## 3. Regras da área\n\n`;
-    if (mod && mod.tipo !== "livre"){
-      md += desce(limpaModulo(T.bases[mod.tipo]), 2) + "\n\n" + desce(limpaModulo(T.modulos[mod.id]), 2) + "\n\n";
-    } else {
-      md += "Texto livre, sem regras de área específicas. Ainda assim: nada de propaganda enganosa, promessa sem prova ou dado sem fonte.\n\n";
-    }
-    md += `## 4. Revisão anti-IA\n\n` + desce(T.antiIA.replace(/^# .*\n+/, ""), 1).trim() + "\n\n";
-    md += `## 5. Briefing\n\n- **Tema:** ${val("tema")}\n- **Para quem:** ${val("publico")}\n- **Onde vai ser publicado:** ${(b.canal || "").trim() || "_a IA decide pelo formato_"}\n- **Objetivo:** ${val("objetivo")}\n- **Fatos e provas:** ${val("fatos").replace(/\n+/g, "; ")}\n- **O que o leitor deve fazer no fim:** ${val("cta")}\n\n`;
-    md += `---\n\n_Gerado no the Writer (gudradee.github.io/TheWriter)._\n`;
-    return md;
+    const it = id => ITEM[id];
+    const L = [];
+    const p = (...linhas) => L.push(...linhas);
+
+    // cabeçalho no formato de skill
+    p("---",
+      `name: the-writer-${slug(titulo) || "perfil"}`,
+      `description: "Perfil de escrita ${titulo.replace(/"/g, "'")} (the Writer). ${fraseTexto.replace(/"/g, "'")} Use para escrever ${formato.toLowerCase()} e outros textos em português do Brasil com este estilo, com regras da área e revisão anti-IA."`,
+      "---", "",
+      `# the Writer · ${titulo}`, "",
+      "> **Como usar:** envie este arquivo como anexo (ou cole o conteúdo) no início de uma conversa com o Claude. Ele ativa um modo de escrita que vale para a conversa inteira. Também pode ser instalado como skill: crie uma pasta com o nome do campo `name` acima, salve este arquivo dentro dela como `SKILL.md`, compacte a pasta em .zip e envie nas configurações de skills do Claude.", "",
+      `**Formato:** ${formato}  `, `**Perfil:** ${fraseTexto}`, "", "---", "");
+
+    // 0. ativação
+    p("## 0. Ativação", "",
+      "Ao ler este arquivo, entre no **modo the Writer** e permaneça nele até o fim da conversa. A partir de agora, todo texto que você escrever para mim (post, carrossel, legenda, e-mail, roteiro, matéria, artigo, anúncio) segue o perfil e as regras deste arquivo, a não ser que eu diga \"sair do the Writer\". Estas instruções valem mais que o seu estilo padrão de escrita.", "",
+      tem("tema")
+        ? `Primeira resposta: confirme em uma linha que o modo está ativo ("the Writer ativo: ${fraseTexto}") e, se o briefing da seção 7 tiver o essencial, escreva o primeiro texto. Se faltar algo essencial, faça todas as perguntas de uma vez.`
+        : `Primeira resposta: confirme em uma linha que o modo está ativo ("the Writer ativo: ${fraseTexto}") e pergunte, numa lista curta, o que falta para o primeiro texto: tema, para quem, objetivo, fatos e provas, chamada para ação e onde vai ser publicado.`,
+      "");
+
+    // 1. fluxo
+    p("## 1. Como você escreve (sempre, em todo texto)", "");
+    [
+      "**Briefing antes.** Confira tema, público, objetivo, fatos e chamada para ação. Se faltar algo essencial, pergunte tudo de uma vez. Se eu pedir para seguir mesmo assim, escreva e marque as lacunas com `[CONFIRMAR: o que falta]`.",
+      "**Nunca invente** número, estatística, estudo, depoimento, citação, resultado de cliente, preço, data ou fala de pessoa real. Sem fonte, use `[CONFIRMAR]`. Esta regra vence qualquer outra.",
+      "**Monte a ficha do texto** (só para você, ou mostre se eu pedir): como cada camada da seção 2 vai aparecer neste texto específico.",
+      "**Escreva o rascunho** aplicando as técnicas da seção 2 e o formato da seção 3. Imite a técnica, nunca o texto: nada de trechos de obras, slogans ou bordões de terceiros, e não escreva como se fosse a pessoa real.",
+      "**Revise com a seção 4 (anti-IA)**, item por item, e reescreva o que encontrar. Depois responda o teste final da seção 4.",
+      "**Confira o checklist do estilo (seção 2.4)** e o checklist da área (seção 3).",
+      "**Entregue no formato da seção 5.**"
+    ].forEach((t, i) => p(`${i + 1}. ${t}`));
+    p("");
+
+    // 2. estilo
+    p("## 2. O estilo deste perfil", "", "### 2.1 Receita", "", fraseTexto, "",
+      "Ordem de prioridade quando duas camadas puxarem para lados diferentes: **regras da área** > **fatos do briefing** > **estrutura** > **linguagem** > **tom** > **toques extras** > **jogada**.", "",
+      "### 2.2 Como aplicar cada camada", "");
+    const ficha = (rot, id, aplicacao) => {
+      const i = it(id);
+      p(`#### ${rot}: ${i.nome}`, "", `**O que é:** ${i.resumo}`, "", `**Onde aparece:** ${aplicacao}`, "", "**Técnicas:**");
+      i.tecnicas.forEach(t => p(`- ${t}`));
+      p("", `**Evite:** ${i.evitar}`, "");
+    };
+    ficha("Linguagem (autor principal)", S.principal, "no texto inteiro: escolha de palavras, tamanho e ritmo das frases, tipo de exemplo e de raciocínio. Antes de cada parágrafo ou slide, pergunte: como estas técnicas resolveriam este trecho?");
+    S.secundarios.forEach(id => ficha("Toque extra", id, "em um ou dois pontos do texto, de preferência na abertura ou na virada. Peso bem menor que o autor principal; não deixe dominar."));
+    ficha("Estrutura (veículo)", S.veiculo, "na arquitetura: como o texto abre, em que ordem as ideias entram e como fecha. Se o formato da área (seção 3) tiver estrutura própria, o formato manda no esqueleto e o veículo manda no jeito de preencher cada parte.");
+    S.tons.forEach(id => ficha("Tom", id, "na relação com o leitor, do começo ao fim: pessoa do verbo, grau de formalidade, humor ou seriedade, calor ou distância."));
+    S.jogadas.forEach(id => ficha("Jogada de referência", id, "uma única vez, no ponto de maior efeito (capa, virada ou fecho). Aplique a técnica, nunca o texto, slogan ou bordão original."));
+    p("### 2.3 Dosagem", "",
+      "- Autor principal: 100% do texto.",
+      S.secundarios.length ? "- Toques extras: 1 ou 2 momentos cada." : "- Toques extras: nenhum.",
+      "- Veículo: o esqueleto inteiro.",
+      `- Tom: ${S.tons.length > 1 ? "os dois juntos, com o primeiro dominante" : "constante do começo ao fim"}.`,
+      S.jogadas.length ? "- Jogada: uma vez." : "- Jogada: nenhuma.", "",
+      "Se eu pedir \"mais\" ou \"menos\" de alguma camada (\"mais irônico\", \"menos poético\"), ajuste só essa dosagem e mantenha o resto.", "",
+      "### 2.4 Checklist do estilo (confira antes de entregar)", "");
+    const chk = [];
+    it(S.principal).tecnicas.forEach(t => chk.push(`${t} (${nome(S.principal)})`));
+    it(S.veiculo).tecnicas.forEach(t => chk.push(`${t} (${nome(S.veiculo)})`));
+    S.tons.forEach(id => chk.push(`${it(id).tecnicas[0]} (tom ${nome(id).toLowerCase()})`));
+    S.secundarios.forEach(id => chk.push(`Pelo menos um momento com: ${it(id).tecnicas[0].toLowerCase()} (${nome(id)})`));
+    S.jogadas.forEach(id => chk.push(`A jogada aparece uma vez: ${it(id).tecnicas[0].toLowerCase()}`));
+    chk.push("Dá para reconhecer as técnicas sem que nenhum autor ou marca seja citado");
+    chk.push("Nenhum fato, número ou citação sem fonte (ou marcado com [CONFIRMAR])");
+    chk.forEach(c => p(`- [ ] ${c}`));
+    p("");
+
+    // 3. área
+    p("## 3. Regras da área", "");
+    if (mod && mod.tipo !== "livre") p(desce(limpaModulo(T.bases[mod.tipo]), 2), "", desce(limpaModulo(T.modulos[mod.id]), 2), "");
+    else p("Texto livre, sem regras de uma área específica. Ainda assim: nada de propaganda enganosa, promessa sem prova ou dado sem fonte. Escolha o formato pelo pedido (post, e-mail, artigo, roteiro) e diga qual escolheu.", "");
+    const outros = C.modulos.filter(m => m.id !== "livre" && m.id !== S.modulo).map(m => nomeModulo(m.id).toLowerCase());
+    p(`Se eu pedir um texto de outra área (${outros.join(", ")}), avise que este arquivo traz só as regras de ${formato.toLowerCase()} e aplique os cuidados gerais: limites legais da profissão, nada de promessa de resultado, fonte para todo dado.`, "");
+
+    // 4. anti-IA
+    p("## 4. Revisão anti-IA", "", desce(T.antiIA.replace(/^# .*\n+/, ""), 1).trim(), "");
+
+    // 5. entrega
+    p("## 5. Formato da entrega", "",
+      "1. **Ficha do texto** em uma ou duas linhas: como linguagem, estrutura, tom e jogada entraram.",
+      "2. **O texto final**, no formato da área (seção 3).",
+      "3. **Notas de revisão:** os trechos `[CONFIRMAR]`, qualquer limite da área que mudou o texto e uma sugestão de variação (ex.: \"quer testar com tom irônico?\").", "",
+      "Se eu pedir só o texto, entregue só o texto.", "");
+
+    // 6. comandos
+    p("## 6. Comandos que valem durante a conversa", "",
+      "- **\"outra versão\"**: reescreva mudando a abertura e a jogada, mantendo o perfil.",
+      "- **\"mais curto\" / \"mais longo\"**: ajuste o tamanho sem perder a estrutura do veículo.",
+      "- **\"troca o tom para X\"**, **\"troca o autor para Y\"**, **\"usa a estrutura de Z\"**: troque só aquela camada usando o catálogo do apêndice e avise a nova receita.",
+      "- **\"revisa este texto\"**: aplique só a seção 4 a um texto meu, sem mudar o que ele diz, e mostre o que mudou.",
+      "- **\"mostra o perfil\"**: mostre a receita e as camadas ativas.",
+      "- **\"sair do the Writer\"**: volte ao seu estilo padrão.", "");
+
+    // 7. briefing
+    p("## 7. Briefing do primeiro texto", "",
+      `- **Tema:** ${val("tema")}`, `- **Para quem:** ${val("publico")}`,
+      `- **Onde vai ser publicado:** ${tem("canal") || "_escolha pelo formato_"}`,
+      `- **Objetivo:** ${val("objetivo")}`,
+      `- **Fatos e provas:** ${val("fatos").replace(/\n+/g, "; ")}`,
+      `- **O que o leitor deve fazer no fim:** ${val("cta")}`, "",
+      "Campos marcados como _não informado_: pergunte antes de escrever, ou marque com `[CONFIRMAR]` se eu pedir para seguir.", "");
+
+    // apêndice: catálogo completo
+    p("---", "", "## Apêndice: catálogo completo", "",
+      "Use para trocar uma camada quando eu pedir. Cada item traz o que é, as técnicas e o que evitar.", "");
+    ["autores", "veiculos", "tons", "referencias"].forEach(c => {
+      p(`### ${{autores:"Autores (linguagem)", veiculos:"Veículos (estrutura)", tons:"Tons (postura)", referencias:"Jogadas de referência"}[c]}`, "");
+      C[c].grupos.forEach(g => {
+        p(`**${g.nome}**`, "");
+        g.itens.forEach(i => p(`- **${i.nome}**: ${i.resumo} Técnicas: ${i.tecnicas.join("; ")}. Evitar: ${i.evitar}`));
+        p("");
+      });
+    });
+    p("---", "", "_Gerado no the Writer: gudradee.github.io/TheWriter_", "");
+    return L.join("\n");
   }
-  function atualizarPrevia(){ const p = $("#previa"); if (p) p.textContent = gerarMD(); }
+  function atualizarPrevia(){ const p = $("#previa"); if (!p) return; try { p.textContent = gerarMD(); } catch(e){ p.textContent = "Não foi possível gerar o arquivo. Recarregue a página (Ctrl+Shift+R ou Cmd+Shift+R) e tente de novo."; } }
   const slug = t => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  let urlArquivo = null;
   function baixar(){
-    const md = gerarMD();
+    let md;
+    try { md = gerarMD(); }
+    catch(e){ console.error(e); toast("Não consegui gerar o arquivo. Recarregue a página (Ctrl+Shift+R) e tente de novo."); return; }
     const nomeArq = `the-writer-${slug(S.nomePerfil || nomeSugerido() || "perfil")}.md`;
-    try {
-      const url = URL.createObjectURL(new Blob([md], {type:"text/markdown;charset=utf-8"}));
-      const a = document.createElement("a"); a.href = url; a.download = nomeArq; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
-      toast(`Arquivo ${nomeArq} baixado.`);
-    } catch(e){ copiar(md, "Não deu para baixar aqui. O texto foi copiado."); }
+    if (urlArquivo) URL.revokeObjectURL(urlArquivo);
+    urlArquivo = URL.createObjectURL(new Blob([md], {type:"text/markdown;charset=utf-8"}));
+    const a = document.createElement("a");
+    a.href = urlArquivo; a.download = nomeArq; a.rel = "noopener"; a.style.display = "none";
+    document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 100);
+    const aviso = $("#aviso-download");
+    if (aviso){
+      aviso.hidden = false;
+      aviso.innerHTML = `Baixando <b>${esc(nomeArq)}</b>. Não apareceu? <a href="${urlArquivo}" download="${esc(nomeArq)}" target="_blank" rel="noopener">Clique aqui para abrir o arquivo</a> ou use <b>Copiar texto</b> e cole no chat.`;
+    }
+    toast(`Arquivo ${nomeArq} gerado.`);
   }
   async function copiar(texto, ok){
     try { await navigator.clipboard.writeText(texto); toast(ok); }

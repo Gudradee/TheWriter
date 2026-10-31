@@ -105,6 +105,14 @@ def main():
     (RAIZ / "docs" / "catalogo.js").write_text(
         "window.CATALOGO = " + json.dumps(cat, ensure_ascii=False) + ";\n"
         + "window.TEXTOS = " + json.dumps(textos, ensure_ascii=False) + ";\n", encoding="utf-8")
+    # versão do catálogo no painel: evita o navegador usar um catalogo.js antigo em cache
+    import hashlib, re
+    js = (RAIZ / "docs" / "catalogo.js").read_bytes()
+    versao_js = hashlib.sha1(js).hexdigest()[:10]
+    html_p = RAIZ / "docs" / "index.html"
+    html = html_p.read_text(encoding="utf-8")
+    html = re.sub(r'catalogo\.js(\?v=[A-Za-z0-9]+)?"', f'catalogo.js?v={versao_js}"', html)
+    html_p.write_text(html, encoding="utf-8")
     zipado = empacotar()
     contagem = {c: sum(len(g["itens"]) for g in cat[c]["grupos"]) for c in CAMADAS}
     print("OK", contagem, f"total={len(ids)}", f"módulos={len(cat['modulos'])}", zipado.name)
